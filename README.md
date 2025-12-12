@@ -78,6 +78,21 @@ npm run lint
 
 All files pass linting with zero errors and warnings.
 
+### Continuous Integration (CI)
+
+This project includes a GitHub Actions workflow for automated linting and build verification:
+
+- **Workflow File**: `.github/workflows/lint.yml`
+- **Triggers**: 
+  - Runs automatically on every push to `master` branch
+  - Runs automatically on all pull requests targeting `master`
+- **Checks Performed**:
+  - ESLint code quality checks
+  - TypeScript compilation verification
+  - Production build validation
+
+The CI workflow ensures that all code merged to master meets quality standards. Pull requests will show a status check indicating whether the linting and build checks passed or failed.
+
 ## Security Audit
 
 To check for security vulnerabilities in dependencies, run:
@@ -204,6 +219,7 @@ Login credentials are managed by your backend database. Contact your system admi
 - Ensure all tests pass before submitting PR (`npm test`)
 - Use TypeScript strict mode
 - Follow ESLint rules (all files must pass linting)
+- **CI/CD**: The GitHub Actions workflow will automatically check your code on push and PRs - ensure all checks pass before merging
 
 ## Recent Updates
 
@@ -214,12 +230,14 @@ Login credentials are managed by your backend database. Contact your system admi
 - ✅ Added comprehensive unit test suite (33 tests, all passing)
 - ✅ Fixed security vulnerabilities
 - ✅ Implemented all component functionality:
-  - Login component with form validation
+  - Login component with form validation and modern UI design
   - Admin components for company and customer management
   - Company coupon management with CRUD operations
   - Customer coupon browsing and purchasing
 - ✅ All linting errors resolved
 - ✅ Code quality improvements
+- ✅ Added GitHub Actions CI workflow for automated linting and build checks
+- ✅ Improved login page with gradient background, floating labels, and enhanced UX
 
 ## License
 
