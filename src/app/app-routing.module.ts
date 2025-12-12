@@ -5,12 +5,18 @@ import { DefaultComponent } from './layouts/default/default.component';
 import { LoginComponent } from './login/login.component';
 const routes: Routes = [
   {
+    path: '',
+    redirectTo: '/login',
+    pathMatch: 'full'
+  },
+  {
+    path: 'login',
+    component: LoginComponent
+  },
+  {
     path:'DefaultComponent',
     component:DefaultComponent,
-    children:[ {
-      path:'login',
-      component:LoginComponent
-    }]
+    children:[]
   }
 ];
 

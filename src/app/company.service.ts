@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +8,10 @@ export class CompanyService {
 
  
   constructor(private http: HttpClient) { }
-  companyLogin(){
-    const url = 'http://localhost:9096/company/loginCompany/{email}/{password}';    
+  companyLogin(email: string, password: string){
+    const encodedEmail = encodeURIComponent(email);
+    const encodedPassword = encodeURIComponent(password);
+    const url = `http://localhost:9096/company/loginCompany/${encodedEmail}/${encodedPassword}`;    
     return this.http.get(url);
   }
   getCompanyCoupons() {

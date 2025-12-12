@@ -1,287 +1,449 @@
-:host {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
-    font-size: 14px;
-    color: #333;
-    box-sizing: border-box;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+.login-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  position: relative;
+  overflow: visible;
+}
 
-  h1,
-  h2,
-  h3,
-  h4,
-  h5,
-  h6 {
-    margin: 8px 0;
-  }
+.login-wrapper::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -50%;
+  width: 200%;
+  height: 200%;
+  background: radial-gradient(circle, rgba(255, 255, 255, 0.1) 0%, transparent 70%);
+  animation: pulse 15s ease-in-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
 
-  p {
-    margin: 0;
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.5;
   }
-
-  .spacer {
-    flex: 1;
-  }
-
-  .toolbar {
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 60px;
-    display: flex;
-    align-items: center;
-    background-color: #1976d2;
-    color: white;
-    font-weight: 600;
-  }
-
-  .toolbar img {
-    margin: 0 16px;
-  }
-
-  .toolbar #twitter-logo {
-    height: 40px;
-    margin: 0 16px;
-  }
-
-  .toolbar #twitter-logo:hover {
+  50% {
+    transform: scale(1.1);
     opacity: 0.8;
   }
+}
 
-  .content {
-    display: flex;
-    margin: 82px auto 32px;
-    padding: 0 16px;
-    max-width: 960px;
-    flex-direction: column;
-    align-items: center;
+.login-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  padding: 3rem;
+  width: 100%;
+  max-width: 480px;
+  position: relative;
+  z-index: 10;
+  animation: slideUp 0.5s ease-out;
+  overflow: visible;
+  pointer-events: auto;
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.login-header {
+  text-align: center;
+  margin-bottom: 2.5rem;
+}
+
+.logo-icon {
+  width: 80px;
+  height: 80px;
+  margin: 0 auto 1.5rem;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 8px 16px rgba(102, 126, 234, 0.4);
+}
+
+.logo-icon mat-icon {
+  font-size: 40px;
+  width: 40px;
+  height: 40px;
+  color: white;
+}
+
+.login-header h1 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+  font-size: 2rem;
+  font-weight: 600;
+  letter-spacing: -0.5px;
+}
+
+.subtitle {
+  margin: 0;
+  color: #666;
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.login-form mat-form-field {
+  width: 100%;
+}
+
+.login-form mat-form-field mat-icon[matPrefix] {
+  color: #667eea;
+  margin-right: 8px;
+  pointer-events: none !important;
+  z-index: 1;
+}
+
+/* Ensure form field wrapper doesn't block clicks */
+.login-form mat-form-field {
+  pointer-events: auto !important;
+}
+
+.login-form .mat-mdc-form-field {
+  pointer-events: auto !important;
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.875rem;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-top: 0.5rem;
+  height: 48px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+  transition: all 0.3s ease;
+}
+
+.login-button:hover:not([disabled]) {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.5);
+}
+
+.login-button mat-icon {
+  margin-right: 8px;
+  vertical-align: middle;
+}
+
+.login-button[disabled] {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Material Form Field Customization */
+::ng-deep .mat-mdc-form-field-appearance-outline .mat-mdc-text-field-wrapper {
+  background-color: #f8f9fa;
+}
+
+::ng-deep .mat-mdc-form-field-appearance-outline .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field-appearance-outline .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field-appearance-outline .mdc-notched-outline__trailing {
+  border-color: #e0e0e0;
+}
+
+::ng-deep .mat-mdc-form-field-appearance-outline.mat-focused .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-form-field-appearance-outline.mat-focused .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-form-field-appearance-outline.mat-focused .mdc-notched-outline__trailing {
+  border-color: #667eea;
+  border-width: 2px;
+}
+
+/* Force all labels to float above fields for outline appearance - ALWAYS */
+::ng-deep .mat-mdc-form-field-appearance-outline .mdc-floating-label {
+  transform: translateY(-1.28125em) scale(0.75) !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+
+::ng-deep .mat-mdc-form-field-appearance-outline .mat-mdc-floating-label {
+  transform: translateY(-1.28125em) scale(0.75) !important;
+  opacity: 1 !important;
+  pointer-events: none !important;
+}
+
+::ng-deep .mat-mdc-form-field-appearance-outline .mdc-floating-label--float-above {
+  transform: translateY(-1.28125em) scale(0.75) !important;
+  opacity: 1 !important;
+}
+
+/* Force label to stay above even when not focused or empty */
+::ng-deep .mat-mdc-form-field-appearance-outline:not(.mat-focused) .mdc-floating-label:not(.mdc-floating-label--float-above) {
+  transform: translateY(-1.28125em) scale(0.75) !important;
+  opacity: 1 !important;
+}
+
+::ng-deep .mat-mdc-form-field-appearance-outline .mdc-notched-outline .mdc-floating-label {
+  transform: translateY(-1.28125em) scale(0.75) !important;
+  opacity: 1 !important;
+}
+
+/* Ensure selected value is displayed and visible */
+::ng-deep .mat-mdc-select-value {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+::ng-deep .mat-mdc-select-value-text {
+  color: rgba(0, 0, 0, 0.87) !important;
+  font-size: 16px !important;
+  opacity: 1 !important;
+  display: block !important;
+}
+
+/* Force labels to always float above - override ALL Material defaults */
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline .mdc-floating-label,
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline .mat-mdc-floating-label {
+  transform: translateY(-1.28125em) scale(0.75) !important;
+  opacity: 1 !important;
+  top: 0 !important;
+  position: absolute !important;
+  pointer-events: none !important;
+  left: 12px !important;
+  width: auto !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  z-index: 1 !important;
+}
+
+/* Ensure notch is always notched and wide enough for label - fix clipping */
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline .mdc-notched-outline {
+  pointer-events: none !important;
+}
+
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline .mdc-notched-outline--notched .mdc-notched-outline__notch {
+  max-width: none !important;
+  min-width: 0 !important;
+  width: auto !important;
+  padding-left: 4px !important;
+  padding-right: 4px !important;
+  overflow: visible !important;
+}
+
+/* Fix label text visibility - ensure no clipping */
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline .mdc-floating-label span,
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline .mat-mdc-floating-label span,
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline .mdc-floating-label mat-label,
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline .mat-mdc-floating-label mat-label {
+  display: inline-block !important;
+  width: auto !important;
+  max-width: none !important;
+  overflow: visible !important;
+  text-overflow: clip !important;
+  white-space: nowrap !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+/* Force should-float class behavior */
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline.mat-form-field-should-float .mdc-floating-label,
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline.mat-form-field-should-float .mat-mdc-floating-label {
+  transform: translateY(-1.28125em) scale(0.75) !important;
+  opacity: 1 !important;
+}
+
+/* Hide placeholder text */
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline input::placeholder,
+::ng-deep .login-form .mat-mdc-form-field-appearance-outline .mat-mdc-select-placeholder {
+  opacity: 0 !important;
+  color: transparent !important;
+}
+
+/* Ensure select form field is fully interactive */
+::ng-deep .mat-mdc-form-field-type-mat-select {
+  cursor: pointer;
+}
+
+::ng-deep .mat-mdc-form-field-type-mat-select .mat-mdc-text-field-wrapper {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+::ng-deep .mat-mdc-form-field-type-mat-select .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+::ng-deep .mat-mdc-select-value {
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .mat-mdc-option {
+  display: flex;
+  align-items: center;
+}
+
+.option-with-icon {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.option-with-icon mat-icon {
+  font-size: 20px;
+  width: 20px;
+  height: 20px;
+  color: #667eea;
+}
+
+::ng-deep .mat-mdc-option .option-with-icon mat-icon {
+  margin-right: 8px;
+  color: #667eea;
+}
+
+/* Ensure Material Select dropdown panel is visible */
+::ng-deep .cdk-overlay-container {
+  z-index: 9999 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  pointer-events: none !important;
+}
+
+::ng-deep .cdk-overlay-pane {
+  z-index: 9999 !important;
+  pointer-events: auto !important;
+  position: absolute !important;
+  max-width: 100vw !important;
+  max-height: 100vh !important;
+}
+
+::ng-deep .mat-mdc-select-panel {
+  z-index: 9999 !important;
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  position: static !important;
+  min-width: 100% !important;
+  max-height: 256px !important;
+  overflow: auto !important;
+  background: white !important;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
+}
+
+::ng-deep .mat-mdc-select-panel-above {
+  z-index: 9999 !important;
+}
+
+::ng-deep .mat-mdc-select-panel-below {
+  z-index: 9999 !important;
+}
+
+/* Ensure select trigger is clickable */
+::ng-deep .mat-mdc-select-trigger {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  width: 100%;
+  position: relative;
+  z-index: 10;
+}
+
+::ng-deep .mat-mdc-form-field .mat-mdc-text-field-wrapper {
+  cursor: pointer !important;
+  position: relative;
+}
+
+::ng-deep .mat-mdc-form-field-type-mat-select .mat-mdc-text-field-wrapper {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+::ng-deep .mat-mdc-form-field-type-mat-select .mat-mdc-text-field-wrapper .mat-mdc-form-field-input-control {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
+}
+
+::ng-deep .mat-mdc-select-value {
+  pointer-events: none;
+}
+
+::ng-deep .mat-mdc-select-arrow-wrapper {
+  pointer-events: none;
+}
+
+/* Ensure the entire select area is clickable */
+::ng-deep .mat-mdc-form-field-type-mat-select .mdc-text-field {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+}
+
+::ng-deep .mat-mdc-form-field-type-mat-select .mdc-text-field__input {
+  cursor: pointer !important;
+  pointer-events: auto !important;
+  position: relative;
+  z-index: 10;
+}
+
+/* Make sure prefix icon doesn't block clicks */
+::ng-deep .mat-mdc-form-field-type-mat-select .mat-mdc-form-field-icon-prefix {
+  pointer-events: none !important;
+  z-index: 1;
+}
+
+/* Custom select panel class */
+::ng-deep .custom-select-panel {
+  display: block !important;
+  visibility: visible !important;
+  opacity: 1 !important;
+  background: white !important;
+  min-width: 100% !important;
+  max-height: 256px !important;
+  overflow: auto !important;
+  box-shadow: 0px 5px 5px -3px rgba(0, 0, 0, 0.2), 0px 8px 10px 1px rgba(0, 0, 0, 0.14), 0px 3px 14px 2px rgba(0, 0, 0, 0.12) !important;
+}
+
+/* Responsive Styles */
+@media screen and (max-width: 600px) {
+  .login-wrapper {
+    padding: 1rem;
   }
 
-  svg.material-icons {
-    height: 24px;
-    width: auto;
+  .login-card {
+    padding: 2rem 1.5rem;
   }
 
-  svg.material-icons:not(:last-child) {
-    margin-right: 8px;
+  .login-header h1 {
+    font-size: 1.75rem;
   }
 
-  .card svg.material-icons path {
-    fill: #888;
+  .logo-icon {
+    width: 70px;
+    height: 70px;
   }
 
-  .card-container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin-top: 16px;
+  .logo-icon mat-icon {
+    font-size: 35px;
+    width: 35px;
+    height: 35px;
   }
-
-  .card {
-    border-radius: 4px;
-    border: 1px solid #eee;
-    background-color: #fafafa;
-    height: 40px;
-    width: 200px;
-    margin: 0 8px 16px;
-    padding: 16px;
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.2s ease-in-out;
-    line-height: 24px;
-  }
-
-  .card-container .card:not(:last-child) {
-    margin-right: 0;
-  }
-
-  .card.card-small {
-    height: 16px;
-    width: 168px;
-  }
-
-  .card-container .card:not(.highlight-card) {
-    cursor: pointer;
-  }
-
-  .card-container .card:not(.highlight-card):hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 17px rgba(0, 0, 0, 0.35);
-  }
-
-  .card-container .card:not(.highlight-card):hover .material-icons path {
-    fill: rgb(105, 103, 103);
-  }
-
-  .card.highlight-card {
-    background-color: #1976d2;
-    color: white;
-    font-weight: 600;
-    border: none;
-    width: auto;
-    min-width: 30%;
-    position: relative;
-  }
-
-  .card.card.highlight-card span {
-    margin-left: 60px;
-  }
-
-  svg#rocket {
-    width: 80px;
-    position: absolute;
-    left: -10px;
-    top: -24px;
-  }
-
-  svg#rocket-smoke {
-    height: calc(100vh - 95px);
-    position: absolute;
-    top: 10px;
-    right: 180px;
-    z-index: -10;
-  }
-
-  a,
-  a:visited,
-  a:hover {
-    color: #1976d2;
-    text-decoration: none;
-  }
-
-  a:hover {
-    color: #125699;
-  }
-
-  .terminal {
-    position: relative;
-    width: 80%;
-    max-width: 600px;
-    border-radius: 6px;
-    padding-top: 45px;
-    margin-top: 8px;
-    overflow: hidden;
-    background-color: rgb(15, 15, 16);
-  }
-
-  .terminal::before {
-    content: "\2022 \2022 \2022";
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 4px;
-    background: rgb(58, 58, 58);
-    color: #c2c3c4;
-    width: 100%;
-    font-size: 2rem;
-    line-height: 0;
-    padding: 14px 0;
-    text-indent: 4px;
-  }
-
-  .terminal pre {
-    font-family: SFMono-Regular,Consolas,Liberation Mono,Menlo,monospace;
-    color: white;
-    padding: 0 1rem 1rem;
-    margin: 0;
-  }
-
-  .circle-link {
-    height: 40px;
-    width: 40px;
-    border-radius: 40px;
-    margin: 8px;
-    background-color: white;
-    border: 1px solid #eeeeee;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    transition: 1s ease-out;
-  }
-
-  .circle-link:hover {
-    transform: translateY(-0.25rem);
-    box-shadow: 0px 3px 15px rgba(0, 0, 0, 0.2);
-  }
-
-  footer {
-    margin-top: 8px;
-    display: flex;
-    align-items: center;
-    line-height: 20px;
-  }
-
-  footer a {
-    display: flex;
-    align-items: center;
-  }
-
-  .github-star-badge {
-    color: #24292e;
-    display: flex;
-    align-items: center;
-    font-size: 12px;
-    padding: 3px 10px;
-    border: 1px solid rgba(27,31,35,.2);
-    border-radius: 3px;
-    background-image: linear-gradient(-180deg,#fafbfc,#eff3f6 90%);
-    margin-left: 4px;
-    font-weight: 600;
-    font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol;
-  }
-
-  .github-star-badge:hover {
-    background-image: linear-gradient(-180deg,#f0f3f6,#e6ebf1 90%);
-    border-color: rgba(27,31,35,.35);
-    background-position: -.5em;
-  }
-
-  .github-star-badge .material-icons {
-    height: 16px;
-    width: 16px;
-    margin-right: 4px;
-  }
-
-  svg#clouds {
-    position: fixed;
-    bottom: -160px;
-    left: -230px;
-    z-index: -10;
-    width: 1920px;
-  }
-  
-  /* Responsive Styles */
-  @media screen and (max-width: 767px) {
-
-    .card-container > *:not(.circle-link) ,
-    .terminal {
-      width: 100%;
-    }
-
-    .card:not(.highlight-card) {
-      height: 16px;
-      margin: 8px 0;
-    }
-
-    .card.highlight-card span {
-      margin-left: 72px;
-    }
-
-    svg#rocket-smoke {
-      right: 120px;
-      transform: rotate(-5deg);
-    }
-  }
-
-  @media screen and (max-width: 575px) {
-    svg#rocket-smoke {
-      display: none;
-      visibility: hidden;
-    }
-  }
+}

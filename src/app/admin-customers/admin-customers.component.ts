@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AdminService } from '../admin.service';
 
 @Component({
   selector: 'app-admin-customers',
@@ -6,10 +7,18 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./admin-customers.component.css']
 })
 export class AdminCustomersComponent implements OnInit {
+  customers$: unknown | undefined;
 
-  constructor() { }
+  constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
+    this.loadCustomers();
   }
 
+  loadCustomers(): void {
+    this.adminService.getAllCustomers().subscribe(
+      data => this.customers$ = data,
+      error => console.error('Error loading customers:', error)
+    );
+  }
 }
