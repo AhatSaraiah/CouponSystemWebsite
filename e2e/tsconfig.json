@@ -8,8 +8,13 @@
     "types": [
       "jasmine",
       "node"
-    ],
-    "enableIvy": false
-
-  }
+    ]
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "../out-tsc/e2e",
+    "node_modules"
+  ]
 }

@@ -1,10 +1,61 @@
-<p>login works!</p>
+<div class="login-wrapper">
+  <div class="login-card">
+    <div class="login-header">
+      <div class="logo-icon">
+        <mat-icon>card_giftcard</mat-icon>
+      </div>
+      <h1>Welcome Back</h1>
+      <p class="subtitle">Sign in to your account to continue</p>
+    </div>
 
-  <mat-form-field appearance="fill">
-    <mat-label>Select Client Type </mat-label>
-    <mat-select disableRipple>
-      <mat-option value="1">Admin</mat-option>
-      <mat-option value="2">Company</mat-option>
-      <mat-option value="3">Customer</mat-option>
-    </mat-select>
-  </mat-form-field>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Select Client Type</mat-label>
+        <mat-select 
+          #clientTypeSelect
+          formControlName="clientType" 
+          (openedChange)="onOpenedChange($event)" 
+          (selectionChange)="onClientTypeChange($event)"
+          [disabled]="false"
+          panelClass="custom-select-panel">
+          <mat-option value="1">Admin</mat-option>
+          <mat-option value="2">Company</mat-option>
+          <mat-option value="3">Customer</mat-option>
+        </mat-select>
+        <mat-icon matPrefix>account_circle</mat-icon>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Email Address</mat-label>
+        <input matInput type="email" formControlName="email">
+        <mat-icon matPrefix>email</mat-icon>
+        <mat-error *ngIf="loginForm.get('email')?.hasError('required')">
+          Email is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('email')?.hasError('email')">
+          Please enter a valid email
+        </mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Password</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" autocomplete="current-password">
+        <mat-icon matPrefix>lock</mat-icon>
+        <button mat-icon-button matSuffix (click)="hidePassword = !hidePassword" type="button" aria-label="Toggle password visibility">
+          <mat-icon>{{hidePassword ? 'visibility_off' : 'visibility'}}</mat-icon>
+        </button>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('required')">
+          Password is required
+        </mat-error>
+        <mat-error *ngIf="loginForm.get('password')?.hasError('minlength')">
+          Password must be at least 6 characters
+        </mat-error>
+      </mat-form-field>
+
+      <button mat-raised-button color="primary" type="submit" [disabled]="!loginForm.valid" class="login-button">
+        <mat-icon>login</mat-icon>
+        Sign In
+      </button>
+    </form>
+  </div>
+</div>

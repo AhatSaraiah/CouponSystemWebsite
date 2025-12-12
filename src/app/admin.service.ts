@@ -1,13 +1,15 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AdminService {
   constructor(private http: HttpClient) { }
-  adminLogin(){
-    const url = 'http://localhost:9096/admin/loginAdmin/{email}/{password}';    
+  adminLogin(email: string, password: string){
+    const encodedEmail = encodeURIComponent(email);
+    const encodedPassword = encodeURIComponent(password);
+    const url = `http://localhost:9096/admin/loginAdmin/${encodedEmail}/${encodedPassword}`;    
     return this.http.get(url);
   }
   getCompanies() {

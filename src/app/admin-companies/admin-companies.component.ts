@@ -8,7 +8,8 @@ import { AdminService } from '../admin.service';
 })
 export class AdminCompaniesComponent implements OnInit {
 
-  companies$: Object | undefined 
+  companies$: unknown | undefined;
+  
   constructor(private data: AdminService) { }
 
   ngOnInit() {

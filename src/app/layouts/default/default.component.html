@@ -1,15 +1,31 @@
-<header flexlayout="column"> logo</header>
-
-<div flexlayout="row" fxFlex>
-
-   <div fxFlex="20">sidebar</div>
-      <a routerLink="home">Home</a> <br>
-      <a routerLink="login">Login</a>
-      <div fxFlex="80" class="content">
-        <router-outlet></router-outlet>
-      </div>
-
+<div class="layout-container" fxLayout="column" fxFlexFill>
+  <!-- Header -->
+  <header class="header" fxLayout="row" fxLayoutAlign="start center">
+    <div class="logo">
+      <h1>Coupon System</h1>
     </div>
-<footer>
-    footer
-</footer>
+  </header>
+
+  <!-- Main Content Area -->
+  <div class="main-content" fxLayout="row" fxFlex>
+    <!-- Sidebar -->
+    <aside class="sidebar" fxFlex="20" fxLayout="column">
+      <nav class="nav-menu">
+        <h3>Navigation</h3>
+        <ul>
+          <li><a routerLink="/DefaultComponent" routerLinkActive="active">Home</a></li>
+        </ul>
+      </nav>
+    </aside>
+
+    <!-- Content Area -->
+    <main class="content" fxFlex="80">
+      <router-outlet></router-outlet>
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer" fxLayout="row" fxLayoutAlign="center center">
+    <p>&copy; 2025 Coupon System. All rights reserved.</p>
+  </footer>
+</div>
