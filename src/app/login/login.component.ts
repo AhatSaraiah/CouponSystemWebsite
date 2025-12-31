@@ -2,9 +2,11 @@ import { Component, ViewChild, AfterViewInit, ChangeDetectorRef, OnDestroy } fro
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSelect } from '@angular/material/select';
 import { Subscription } from 'rxjs';
+import { Router } from '@angular/router';
 import { AdminService } from '../admin.service';
 import { CompanyService } from '../company.service';
 import { CustomerService } from '../customer.service';
+import { AuthService } from '../auth.service';
 
 @Component({
   selector: 'app-login',
@@ -23,11 +25,13 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
     private adminService: AdminService,
     private companyService: CompanyService,
     private customerService: CustomerService,
-    private cdr: ChangeDetectorRef
+    private cdr: ChangeDetectorRef,
+    private router: Router,
+    private authService: AuthService
   ) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
+      password: ['', [Validators.required, Validators.minLength(3)]],
       clientType: ['', Validators.required]
     });
   }
@@ -39,13 +43,13 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
       formFields.forEach(field => {
         const htmlField = field as HTMLElement;
         htmlField.classList.add('mat-form-field-should-float');
-        
+
         // Ensure notch is notched
         const notch = htmlField.querySelector('.mdc-notched-outline');
         if (notch) {
           (notch as HTMLElement).classList.add('mdc-notched-outline--notched');
         }
-        
+
         // Find and update all label elements
         const labels = htmlField.querySelectorAll('.mdc-floating-label, .mat-mdc-floating-label, [class*="floating-label"]');
         labels.forEach(label => {
@@ -62,13 +66,13 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
           htmlLabel.style.textOverflow = 'clip';
           htmlLabel.style.whiteSpace = 'nowrap';
           htmlLabel.style.zIndex = '1';
-          
+
           // Calculate and set notch width based on actual label text width
           setTimeout(() => {
             const labelText = htmlLabel.textContent?.trim() || '';
             const matLabel = htmlLabel.querySelector('mat-label');
             const actualText = matLabel?.textContent?.trim() || labelText;
-            
+
             if (actualText) {
               // Create a temporary span to measure text width accurately
               const tempSpan = document.createElement('span');
@@ -80,10 +84,10 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
               tempSpan.style.whiteSpace = 'nowrap';
               tempSpan.textContent = actualText;
               document.body.appendChild(tempSpan);
-              
+
               const textWidth = tempSpan.offsetWidth;
               document.body.removeChild(tempSpan);
-              
+
               // Set notch width (scaled by 0.75 + padding for the notch)
               const notch = htmlField.querySelector('.mdc-notched-outline__notch');
               if (notch) {
@@ -97,12 +101,12 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
           }, 50);
         });
       });
-      
+
       // Subscribe to form control value changes
       this.clientTypeSubscription = this.loginForm.get('clientType')?.valueChanges.subscribe(value => {
         this.updateLabelFloat(value);
       });
-      
+
       // Initial check
       const currentValue = this.loginForm.get('clientType')?.value;
       if (currentValue) {
@@ -161,15 +165,22 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
   onSubmit(): void {
     if (this.loginForm.valid) {
       const { email, password, clientType } = this.loginForm.value;
+      console.log('Attempting login...', { email, clientType });
 
       switch (clientType) {
         case '1': // Admin
           this.adminService.adminLogin(email, password).subscribe(
             response => {
-              alert('Admin login successful!');
-              // Handle admin login success (e.g., navigate to admin dashboard)
+              console.log('Backend response:', response);
+              if (response === true) {
+                this.authService.setUserRole('admin');
+                this.router.navigate(['/DefaultComponent']);
+              } else {
+                alert('Login failed: Invalid Credentials');
+              }
             },
             error => {
+              console.error('Login Error:', error);
               let errorMessage = 'Admin login failed. ';
               if (error.status === 401 || error.status === 403) {
                 errorMessage += 'Invalid email or password.';
@@ -188,10 +199,16 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
         case '2': // Company
           this.companyService.companyLogin(email, password).subscribe(
             response => {
-              alert('Company login successful!');
-              // Handle company login success (e.g., navigate to company dashboard)
+              console.log('Backend response:', response);
+              if (response === true) {
+                this.authService.setUserRole('company');
+                this.router.navigate(['/DefaultComponent']);
+              } else {
+                alert('Login failed: Invalid Credentials');
+              }
             },
             error => {
+              console.error('Login Error:', error);
               let errorMessage = 'Company login failed. ';
               if (error.status === 401 || error.status === 403) {
                 errorMessage += 'Invalid email or password.';
@@ -210,10 +227,16 @@ export class LoginComponent implements AfterViewInit, OnDestroy {
         case '3': // Customer
           this.customerService.customerLogin(email, password).subscribe(
             response => {
-              alert('Customer login successful!');
-              // Handle customer login success (e.g., navigate to customer dashboard)
+              console.log('Backend response:', response);
+              if (response === true) {
+                this.authService.setUserRole('customer');
+                this.router.navigate(['/DefaultComponent']);
+              } else {
+                alert('Login failed: Invalid Credentials');
+              }
             },
             error => {
+              console.error('Login Error:', error);
               let errorMessage = 'Customer login failed. ';
               if (error.status === 401 || error.status === 403) {
                 errorMessage += 'Invalid email or password.';

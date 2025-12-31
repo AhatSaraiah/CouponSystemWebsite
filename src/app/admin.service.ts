@@ -20,17 +20,17 @@ export class AdminService {
     const url = 'http://localhost:9096/admin/getOneCompany/{id}';    
     return this.http.get(url);
   }
-  addCompany() {
+  addCompany(company: any) {
     const url = 'http://localhost:9096/admin/addCompany';    
-    return this.http.get(url);
+    return this.http.post(url, company);
   }
-  updateCompany() {
+  updateCompany(company: any) {
     const url = 'http://localhost:9096/admin/updateCompany';    
-    return this.http.get(url);
+    return this.http.put(url, company);
   }
- deleteCompany() {
-    const url = 'http://localhost:9096/admin/deleteCompany/{id}';    
-    return this.http.get(url);
+ deleteCompany(id: number) {
+    const url = `http://localhost:9096/admin/deleteCompany/${id}`;    
+    return this.http.delete(url);
   }
 
   getAllCustomers() {
@@ -41,17 +41,17 @@ export class AdminService {
     const url = 'http://localhost:9096/admin/getOneCustomer/{id}';    
     return this.http.get(url);
   }
-  addCustomer() {
+  addCustomer(customer: any) {
     const url = 'http://localhost:9096/admin/addCustomer';    
-    return this.http.get(url);
+    return this.http.post(url, customer);
   }
-  updateCustomer() {
+  updateCustomer(customer: any) {
     const url = 'http://localhost:9096/admin/updateCustomer';    
-    return this.http.get(url);
+    return this.http.put(url, customer);
   }
-  deleteCustomer() {
-    const url = 'http://localhost:9096/admin/deleteCustomer/{id}';    
-    return this.http.get(url);
+  deleteCustomer(id: number) {
+    const url = `http://localhost:9096/admin/deleteCustomer/${id}`;    
+    return this.http.delete(url);
   }
 
 }

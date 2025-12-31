@@ -11,10 +11,46 @@
     <!-- Sidebar -->
     <aside class="sidebar" fxFlex="20" fxLayout="column">
       <nav class="nav-menu">
-        <h3>Navigation</h3>
-        <ul>
-          <li><a routerLink="/DefaultComponent" routerLinkActive="active">Home</a></li>
-        </ul>
+        <!-- Admin Section - Only for Admin users -->
+        <ng-container *ngIf="(userRole$ | async) === 'admin'">
+          <h3>Admin</h3>
+          <ul>
+            <li>
+              <a routerLink="/DefaultComponent/admin-companies" routerLinkActive="active">
+                <mat-icon>business</mat-icon> Companies
+              </a>
+            </li>
+            <li>
+              <a routerLink="/DefaultComponent/admin-customers" routerLinkActive="active">
+                <mat-icon>people</mat-icon> Customers
+              </a>
+            </li>
+          </ul>
+        </ng-container>
+
+        <!-- Company Section - Only for Company users -->
+        <ng-container *ngIf="(userRole$ | async) === 'company'">
+          <h3>Management</h3>
+          <ul>
+            <li>
+              <a routerLink="/DefaultComponent/company-coupons" routerLinkActive="active">
+                <mat-icon>local_offer</mat-icon> Company Coupons
+              </a>
+            </li>
+          </ul>
+        </ng-container>
+
+        <!-- Customer Section - Only for Customer users -->
+        <ng-container *ngIf="(userRole$ | async) === 'customer'">
+          <h3>Shopping</h3>
+          <ul>
+            <li>
+              <a routerLink="/DefaultComponent/customer-coupons" routerLinkActive="active">
+                <mat-icon>shopping_cart</mat-icon> Browse & Buy
+              </a>
+            </li>
+          </ul>
+        </ng-container>
       </nav>
     </aside>
 
