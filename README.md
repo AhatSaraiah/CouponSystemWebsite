@@ -1,252 +1,340 @@
-# Coupon System Website
+# Coupon System - Frontend
 
-A web application for managing coupons, built with Angular. This system provides functionality for administrators, companies, and customers to manage and purchase coupons.
+Angular web application for the Coupon Management System.
 
-## Features
+## 🛠️ Tech Stack
 
-- **Admin Management**: Manage companies and customers with full CRUD operations
-- **Company Portal**: Companies can manage their coupons, add/update/delete coupons, and filter by category or price
-- **Customer Portal**: Customers can browse and purchase coupons, view their purchased coupons, and filter by category or price
-- **Authentication**: Login functionality for Admin, Company, and Customer with form validation
+- **Angular 11.0.5** - Web framework
+- **Angular Material 11.0.3** - UI component library
+- **RxJS 6.6** - Reactive programming
+- **TypeScript 4.0** - Type-safe JavaScript
+- **Angular Flex Layout** - Responsive layouts
+- **Angular Router** - Navigation
 
-## Prerequisites
+## 📦 Dependencies
 
-Before you begin, ensure you have the following installed:
-
-- **Node.js**: Version 14.x or higher (Node.js 16.x or 18.x LTS recommended for Angular 15)
-- **npm**: Version 6.x or higher (comes with Node.js, npm 8.x+ recommended)
-- **Angular CLI**: Will be installed as a dev dependency (v15.2.0)
-
-## Installation
-
-1. Clone the repository:
-```bash
-git clone https://github.com/AhatSaraiah/CouponSystemWebsite.git
-cd CouponSystemWebsite
+```json
+{
+  "dependencies": {
+    "@angular/animations": "~11.0.5",
+    "@angular/common": "~11.0.5",
+    "@angular/core": "~11.0.5",
+    "@angular/forms": "~11.0.5",
+    "@angular/material": "^11.0.3",
+    "@angular/platform-browser": "~11.0.5",
+    "@angular/router": "~11.0.5",
+    "@angular/flex-layout": "^11.0.0-beta.33",
+    "rxjs": "~6.6.0",
+    "tslib": "^2.0.0",
+    "zone.js": "~0.10.2"
+  }
+}
 ```
 
-2. Install dependencies:
+## 🏗️ Project Structure
+
+```
+src/app/
+├── layouts/
+│   └── default/                    # Main layout with sidebar
+│       ├── default.component.html
+│       ├── default.component.css
+│       ├── default.component.ts
+│       └── default.module.ts       # Feature module
+│
+├── login/                          # Authentication
+│   ├── login.component.html
+│   ├── login.component.css
+│   └── login.component.ts
+│
+├── admin-companies/                # Admin: Company management
+│   ├── admin-companies.component.html
+│   ├── admin-companies.component.css
+│   └── admin-companies.component.ts
+│
+├── admin-customers/                # Admin: Customer management
+│   ├── admin-customers.component.html
+│   ├── admin-customers.component.css
+│   └── admin-customers.component.ts
+│
+├── company-coupons/                # Company: Coupon CRUD
+│   ├── company-coupons.component.html
+│   ├── company-coupons.component.css
+│   └── company-coupons.component.ts
+│
+├── customer-coupons/               # Customer: Browse & purchase
+│   ├── customer-coupons.component.html
+│   ├── customer-coupons.component.css
+│   └── customer-coupons.component.ts
+│
+├── services/
+│   ├── admin.service.ts            # Admin API calls
+│   ├── company.service.ts          # Company API calls
+│   ├── customer.service.ts         # Customer API calls
+│   └── auth.service.ts             # Role-based auth
+│
+├── app-routing.module.ts           # Route configuration
+├── app.component.ts                # Root component
+└── styles.css                      # Global styles
+```
+
+## 🎨 Features
+
+### **Role-Based Navigation**
+- **Admin** sees: Companies, Customers
+- **Company** sees: Company Coupons
+- **Customer** sees: Browse & Buy
+
+### **UI Components**
+
+#### **Admin Dashboard**
+- ✅ Structured HTML tables for companies/customers
+- ✅ Delete buttons with confirmation
+- ✅ Add forms for new entities
+- ✅ Real-time data updates with Observables
+
+#### **Company Coupons**
+- ✅ Reactive form with validation
+- ✅ **Material Datepicker** with calendar popup
+- ✅ Category dropdown (Food, Fashion, Sport, Home, Electricity, Restaurant, Vacation)
+- ✅ Coupon cards with badges, pricing, and expiration
+- ✅ Delete functionality
+- ✅ Toggle form visibility
+
+#### **Customer Dashboard**
+- ✅ **Browse Store** - View all available coupons
+- ✅ **My Coupons** - View purchased coupons
+- ✅ **Buy Now** button with confirmation
+- ✅ Category badges and expiration dates
+- ✅ Owned badge for purchased coupons
+
+### **Material Design Components Used**
+- `mat-form-field` - Form inputs
+- `mat-select` - Dropdowns
+- `mat-datepicker` - Calendar date picker
+- `mat-button` - Buttons
+- `mat-icon` - Material icons
+- `mat-raised-button` - Elevated buttons
+
+## 🚀 Running the Frontend
+
+### **Development Server**
 ```bash
+cd frontend
 npm install
+npm start
 ```
+Navigate to `http://localhost:4200`
 
-## Development Server
-
-Run `ng serve` or `npm start` for a development server. Navigate to [http://localhost:4200/](http://localhost:4200/). The app will automatically reload if you change any of the source files.
-
-**Note**: The application starts at the login page by default. Ensure your backend server is running on `http://localhost:9096` before attempting to log in.
-
-## Code Scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. 
-
-For a production build, use:
+### **Production Build**
 ```bash
-ng build --configuration production
+npm run build --prod
 ```
+Output: `dist/frontend/`
 
-Note: The `--prod` flag is deprecated. Use `--configuration production` instead.
-
-## Running Unit Tests
-
-Run `ng test` or `npm test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-To run tests in headless mode (CI/CD friendly):
-```bash
-npm test -- --watch=false --browsers=ChromeHeadless
-```
-
-### Test Coverage
-
-The project includes comprehensive unit tests:
-- **Service Tests**: All HTTP services (CompanyService, CustomerService, AdminService) are fully tested
-- **Component Tests**: Core components including AppComponent and LoginComponent
-- **Total Test Count**: 33 tests, all passing
-
-Test files are located in `src/app/**/*.spec.ts`.
-
-## Code Quality
-
-The project uses ESLint for code quality checks. Run linting with:
+### **Linting**
 ```bash
 npm run lint
 ```
 
-All files pass linting with zero errors and warnings.
+## 🔧 Configuration
 
-### Continuous Integration (CI)
-
-This project includes a GitHub Actions workflow for automated linting and build verification:
-
-- **Workflow File**: `.github/workflows/lint.yml`
-- **Triggers**: 
-  - Runs automatically on every push to `master` branch
-  - Runs automatically on all pull requests targeting `master`
-- **Checks Performed**:
-  - ESLint code quality checks
-  - TypeScript compilation verification
-  - Production build validation
-
-The CI workflow ensures that all code merged to master meets quality standards. Pull requests will show a status check indicating whether the linting and build checks passed or failed.
-
-## Security Audit
-
-To check for security vulnerabilities in dependencies, run:
-```bash
-npm audit
+### **API Base URLs**
+Located in service files (`*.service.ts`):
+```typescript
+private baseUrl = 'http://localhost:9096';
 ```
 
-To automatically fix vulnerabilities where possible:
-```bash
-npm audit fix
+### **Routing**
+`app-routing.module.ts`:
+```typescript
+const routes: Routes = [
+  { path: '', component: LoginComponent },
+  {
+    path: 'DefaultComponent',
+    component: DefaultComponent,
+    children: [
+      { path: 'admin-companies', component: AdminCompaniesComponent },
+      { path: 'admin-customers', component: AdminCustomersComponent },
+      { path: 'company-coupons', component: CompanyCouponsComponent },
+      { path: 'customer-coupons', component: CustomerCouponsComponent }
+    ]
+  }
+];
 ```
 
-**Note**: Some vulnerabilities may require manual updates. The project has been upgraded to Angular 15 to address security concerns.
+### **Material Theme**
+`styles.css`:
+```css
+@import "~@angular/material/prebuilt-themes/indigo-pink.css";
+```
 
-## Project Structure
+## 🎯 Key Implementation Details
 
-- **src/app**: Contains the main application code and Angular components
-  - **admin-companies**: Admin component for managing companies (displays company list)
-  - **admin-customers**: Admin component for managing customers (displays customer list)
-  - **company-coupons**: Company portal for managing coupons (CRUD operations, filtering)
-  - **customer-coupons**: Customer portal for viewing and purchasing coupons (browsing, filtering, purchasing)
-  - **login**: Login component for authentication (Admin/Company/Customer)
-  - **layouts/default**: Default layout component
-- **src/assets**: Contains static assets such as images and stylesheets
-- **src/environments**: Contains environment configuration files
-- **e2e**: End-to-end test directory (currently contains placeholder for future E2E framework)
+### **Reactive Forms**
+```typescript
+this.couponForm = this.fb.group({
+  title: ['', Validators.required],
+  category: ['', Validators.required],
+  description: [''],
+  startDate: ['', Validators.required],
+  endDate: ['', Validators.required],
+  amount: [1, [Validators.required, Validators.min(1)]],
+  price: [0, [Validators.required, Validators.min(0)]]
+});
+```
 
-## Component Features
+### **HTTP Service Calls**
+```typescript
+// Using Observables
+getCoupons(): Observable<any> {
+  return this.http.get(`${this.baseUrl}/company/getCompanyCoupons`);
+}
 
-### Login Component
-- **Beautiful, modern UI** with gradient background and card-based design
-- **Default route**: Login page is the first page users see when accessing the application
-- Reactive forms with comprehensive validation
-- Client type selection dropdown (Admin/Company/Customer) with Material Design icons
-- Email and password validation with real-time error messages
-- Password visibility toggle for better user experience
-- Form fields with floating labels (Material Design outline appearance)
-- Integrated with AdminService, CompanyService, and CustomerService
-- URL encoding for email and password to handle special characters
-- Enhanced error handling with user-friendly messages
-- Automatic label positioning and notch width calculation
+// Subscribe in component
+this.coupons$ = this.companyService.getCoupons();
+```
 
-### Admin Components
-- **AdminCompaniesComponent**: Displays and manages all companies
-- **AdminCustomersComponent**: Displays and manages all customers
+### **Async Pipe (No Manual Unsubscribe)**
+```html
+<div *ngFor="let coupon of coupons$ | async">
+  {{ coupon.title }}
+</div>
+```
 
-### Company Components
-- **CompanyCouponsComponent**: 
-  - View all company coupons
-  - Filter by category
-  - Filter by price
-  - Add new coupons
-  - Update existing coupons
-  - Delete coupons
+### **Role-Based Rendering**
+```html
+<ng-container *ngIf="(userRole$ | async) === 'company'">
+  <h3>Management</h3>
+  <ul>
+    <li>
+      <a routerLink="/DefaultComponent/company-coupons">
+        Company Coupons
+      </a>
+    </li>
+  </ul>
+</ng-container>
+```
 
-### Customer Components
-- **CustomerCouponsComponent**:
-  - View purchased coupons
-  - Filter by category
-  - Filter by price
-  - Purchase new coupons
+### **Material Datepicker**
+```html
+<mat-form-field appearance="outline">
+  <mat-label>Start Date</mat-label>
+  <input matInput [matDatepicker]="startPicker" formControlName="startDate">
+  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
+  <mat-datepicker #startPicker></mat-datepicker>
+</mat-form-field>
+```
 
-## Backend API
+## 🎨 Styling Highlights
 
-This application connects to a backend API running on `http://localhost:9096`. **Ensure the backend server is running before attempting to log in.**
+### **Coupon Cards**
+```css
+.coupon-card {
+  background: white;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
 
-### Starting the Backend
+.coupon-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+}
+```
 
-The backend is a separate application (typically a Spring Boot application) that must be started independently:
+### **Category Badges**
+```css
+.category-badge {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+}
+```
 
-1. Navigate to your backend project directory
-2. Start the backend server:
-   - **Maven**: `mvn spring-boot:run`
-   - **Gradle**: `./gradlew bootRun`
-   - **JAR**: `java -jar your-backend.jar`
-3. Wait for the server to start on port 9096
-4. Verify it's running by checking `http://localhost:9096`
+### **Responsive Grid**
+```css
+.coupons-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+  padding: 24px;
+}
+```
 
-### Login Credentials
+## 🔐 Authentication Flow
 
-Login credentials are managed by your backend database. Contact your system administrator or check your backend configuration for the correct email and password combinations for Admin, Company, and Customer accounts.
+1. **Login** → Select role (Admin/Company/Customer)
+2. **AuthService** stores role in BehaviorSubject
+3. **Navigate** to `/DefaultComponent`
+4. **Sidebar** renders role-specific menu items
+5. **Components** fetch data based on role
 
-### API Endpoints
+## 🐛 Common Issues
 
-- **Admin**: `/admin/*` - Company and customer management
-  - `GET /admin/getAllCompanies` - Get all companies
-  - `GET /admin/getAllCustomers` - Get all customers
-  - `GET /admin/loginAdmin/{email}/{password}` - Admin login
-- **Company**: `/company/*` - Coupon management for companies
-  - `GET /company/getCompanyCoupons` - Get all company coupons
-  - `GET /company/getCompanyCoupons/{category}` - Filter by category
-  - `GET /company/getCompanyCoupons/{maxPrice}` - Filter by price
-  - `GET /company/loginCompany/{email}/{password}` - Company login
-- **Customer**: `/customer/*` - Coupon browsing and purchasing for customers
-  - `GET /customer/getCustomerCoupons` - Get customer's coupons
-  - `GET /customer/getCustomerCoupons/{category}` - Filter by category
-  - `GET /customer/getCustomerCoupons/{maxPrice}` - Filter by price
-  - `GET /customer/loginCustomer/{email}/{password}` - Customer login
+### **CORS Errors**
+- Ensure backend has `@CrossOrigin(origins = "http://localhost:4200")`
+- Check browser console for specific CORS error
 
-## Technologies Used
+### **Material Components Not Working**
+- Verify `@angular/material` is installed
+- Import required modules in `default.module.ts`
+- Import Material theme in `styles.css`
 
-- **Angular**: Framework for building web applications (v15.2.0)
-- **TypeScript**: Superset of JavaScript for type-safe code (v4.9.5)
-- **Angular Material**: UI component library (v15.2.0)
-- **RxJS**: Reactive programming library (v7.8.0)
-- **Karma & Jasmine**: Testing framework for unit tests
-- **ESLint**: Code linting and quality checks
-- **Angular Reactive Forms**: Form handling and validation
-- **HTML/CSS**: Markup and styling of the application
+### **Datepicker Not Showing**
+- Import `MatDatepickerModule` and `MatNativeDateModule`
+- Add `<mat-datepicker>` element with template reference variable
 
-## Contributing
+### **Forms Not Validating**
+- Import `ReactiveFormsModule` in module
+- Ensure `FormGroup` is initialized in constructor
+- Bind `[formGroup]` and `formControlName` correctly
 
-1. Fork the repository
-2. Create a new branch (`git checkout -b feature/YourFeature`)
-3. Commit your changes (`git commit -am 'Add new feature'`)
-4. Push to the branch (`git push origin feature/YourFeature`)
-5. Create a new Pull Request
+## 📱 Responsive Design
 
-### Development Guidelines
+- **Flex Layout** for responsive sidebar/content
+- **Material Grid** for coupon cards
+- **Mobile-friendly** forms and buttons
+- **Breakpoints** handled by Angular Flex Layout
 
-- Write unit tests for new features
-- Follow Angular style guide
-- Run linting before committing (`npm run lint`)
-- Ensure all tests pass before submitting PR (`npm test`)
-- Use TypeScript strict mode
-- Follow ESLint rules (all files must pass linting)
-- **CI/CD**: The GitHub Actions workflow will automatically check your code on push and PRs - ensure all checks pass before merging
+## 🚀 Future Enhancements
 
-## Recent Updates
+- [ ] Logout button with session clearing
+- [ ] Route guards for role-based access
+- [ ] Loading spinners for async operations
+- [ ] Toast notifications (Snackbar)
+- [ ] Form field error messages
+- [ ] Search and filter functionality
+- [ ] Pagination for large datasets
+- [ ] Image upload for coupons
+- [ ] User profile page
+- [ ] Dark mode toggle
 
-- ✅ Upgraded from Angular 11 to Angular 15
-- ✅ Replaced deprecated TSLint with ESLint
-- ✅ Removed deprecated Protractor (E2E framework)
-- ✅ Updated all dependencies to secure versions
-- ✅ Added comprehensive unit test suite (33 tests, all passing)
-- ✅ Fixed security vulnerabilities
-- ✅ Implemented all component functionality:
-  - Login component with form validation and modern UI design
-  - Admin components for company and customer management
-  - Company coupon management with CRUD operations
-  - Customer coupon browsing and purchasing
-- ✅ All linting errors resolved
-- ✅ Code quality improvements
-- ✅ Added GitHub Actions CI workflow for automated linting and build checks
-- ✅ Improved login page with gradient background, floating labels, and enhanced UX
+## 🧪 Testing
 
-## License
+### **Unit Tests**
+```bash
+npm run test
+```
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+### **E2E Tests**
+```bash
+npm run e2e
+```
 
-## Contact
+## 📝 Development Notes
 
-For any questions or issues, please contact:
+- **No manual unsubscribe** needed when using `async` pipe
+- **Observables** preferred over Promises for HTTP calls
+- **OnPush change detection** can be added for performance
+- **Lazy loading** can be implemented for feature modules
 
-- **Ahat Saraiah**
-- **Email**: [ahat.saraiah@gmail.com](mailto:ahat.saraiah@gmail.com)
-- **GitHub**: [@AhatSaraiah](https://github.com/AhatSaraiah)
+---
+
+**Angular Version:** 11.0.5  
+**Node Version:** 14+  
+**Package Manager:** npm

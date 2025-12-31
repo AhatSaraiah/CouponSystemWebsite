@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { CompanyService } from '../company.service';
+import { Observable } from 'rxjs';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-company-coupons',
@@ -7,69 +9,59 @@ import { CompanyService } from '../company.service';
   styleUrls: ['./company-coupons.component.css']
 })
 export class CompanyCouponsComponent implements OnInit {
-  coupons$: unknown | undefined;
-  selectedCategory = '';
-  maxPrice: number | null = null;
+  coupons$: Observable<any> | undefined;
+  couponForm: FormGroup;
+  showForm = false;
 
-  constructor(private companyService: CompanyService) { }
+  categories = ['Food', 'Electricity', 'Restaurant', 'Vacation', 'Fashion'];
+
+  constructor(
+    private companyService: CompanyService,
+    private fb: FormBuilder
+  ) {
+    this.couponForm = this.fb.group({
+      category: ['', Validators.required],
+      title: ['', Validators.required],
+      description: ['', Validators.required],
+      startDate: ['', Validators.required],
+      endDate: ['', Validators.required],
+      amount: ['', [Validators.required, Validators.min(1)]],
+      price: ['', [Validators.required, Validators.min(0)]],
+      image: ['https://via.placeholder.com/150'] // Default placeholder
+    });
+  }
 
   ngOnInit(): void {
     this.loadCoupons();
   }
 
   loadCoupons(): void {
-    this.companyService.getCompanyCoupons().subscribe(
-      data => this.coupons$ = data,
-      error => console.error('Error loading coupons:', error)
-    );
+    this.coupons$ = this.companyService.getCompanyCoupons();
   }
 
-  filterByCategory(): void {
-    if (this.selectedCategory) {
-      this.companyService.getCompanyCouponsbyCategory().subscribe(
-        data => this.coupons$ = data,
-        error => console.error('Error filtering by category:', error)
+  toggleForm(): void {
+    this.showForm = !this.showForm;
+  }
+
+  onSubmit(): void {
+    if (this.couponForm.valid) {
+      this.companyService.addCoupon(this.couponForm.value).subscribe(
+        () => {
+          this.loadCoupons();
+          this.showForm = false;
+          this.couponForm.reset({ image: 'https://via.placeholder.com/150' });
+        },
+        error => console.error('Error adding coupon:', error)
       );
-    } else {
-      this.loadCoupons();
     }
   }
 
-  filterByPrice(): void {
-    if (this.maxPrice !== null) {
-      this.companyService.getCompanyCouponsbyPrice().subscribe(
-        data => this.coupons$ = data,
-        error => console.error('Error filtering by price:', error)
+  deleteCoupon(id: number): void {
+    if (confirm('Are you sure you want to delete this coupon?')) {
+      this.companyService.deleteCoupon(id).subscribe(
+        () => this.loadCoupons(),
+        error => console.error('Error deleting coupon:', error)
       );
-    } else {
-      this.loadCoupons();
     }
-  }
-
-  addCoupon(): void {
-    this.companyService.addCoupon().subscribe(
-      () => {
-        this.loadCoupons();
-      },
-      error => console.error('Error adding coupon:', error)
-    );
-  }
-
-  updateCoupon(): void {
-    this.companyService.updateCoupon().subscribe(
-      () => {
-        this.loadCoupons();
-      },
-      error => console.error('Error updating coupon:', error)
-    );
-  }
-
-  deleteCoupon(_id: number): void {
-    this.companyService.deleteCoupon().subscribe(
-      () => {
-        this.loadCoupons();
-      },
-      error => console.error('Error deleting coupon:', error)
-    );
   }
 }

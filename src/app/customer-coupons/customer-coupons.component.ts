@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CustomerService } from '../customer.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-customer-coupons',
@@ -7,51 +8,46 @@ import { CustomerService } from '../customer.service';
   styleUrls: ['./customer-coupons.component.css']
 })
 export class CustomerCouponsComponent implements OnInit {
-  coupons$: unknown | undefined;
-  selectedCategory = '';
-  maxPrice: number | null = null;
+  coupons$: Observable<any> | undefined;
+  viewMode: 'store' | 'my-coupons' = 'store';
 
   constructor(private customerService: CustomerService) { }
 
   ngOnInit(): void {
-    this.loadCoupons();
+    this.loadStore();
   }
 
-  loadCoupons(): void {
-    this.customerService.getCustomerCoupons().subscribe(
-      data => this.coupons$ = data,
-      error => console.error('Error loading coupons:', error)
-    );
-  }
-
-  filterByCategory(): void {
-    if (this.selectedCategory) {
-      this.customerService.getCustomerCouponsbyCategory().subscribe(
-        data => this.coupons$ = data,
-        error => console.error('Error filtering by category:', error)
-      );
+  toggleView(mode: 'store' | 'my-coupons'): void {
+    this.viewMode = mode;
+    if (mode === 'store') {
+      this.loadStore();
     } else {
-      this.loadCoupons();
+      this.loadMyCoupons();
     }
   }
 
-  filterByPrice(): void {
-    if (this.maxPrice !== null) {
-      this.customerService.getCustomerCouponsbyPrice().subscribe(
-        data => this.coupons$ = data,
-        error => console.error('Error filtering by price:', error)
-      );
-    } else {
-      this.loadCoupons();
-    }
+  loadStore(): void {
+    this.coupons$ = this.customerService.getAllCoupons();
   }
 
-  purchaseCoupon(): void {
-    this.customerService.addCouponPurchase().subscribe(
-      () => {
-        this.loadCoupons();
-      },
-      error => console.error('Error purchasing coupon:', error)
-    );
+  loadMyCoupons(): void {
+    this.coupons$ = this.customerService.getCustomerCoupons();
+  }
+
+  purchaseCoupon(coupon: any): void {
+    if (confirm(`Buy ${coupon.title} for $${coupon.price}?`)) {
+      this.customerService.addCouponPurchase(coupon).subscribe(
+        () => {
+          alert('Purchase successful!');
+          // Refresh current view
+          if (this.viewMode === 'store') this.loadStore();
+          else this.loadMyCoupons();
+        },
+        error => {
+          console.error('Error purchasing coupon:', error);
+          alert('Failed to purchase coupon. It might be expired or already owned.');
+        }
+      );
+    }
   }
 }

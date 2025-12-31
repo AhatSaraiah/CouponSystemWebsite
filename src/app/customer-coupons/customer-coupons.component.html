@@ -1,1 +1,45 @@
-<p>customer-coupons works!</p>
+<div class="container">
+    <div class="header-actions">
+        <h2>Customer Dashboard</h2>
+        <div class="toggle-group">
+            <button mat-raised-button [color]="viewMode === 'store' ? 'primary' : ''" (click)="toggleView('store')">
+                Browse Store
+            </button>
+            <button mat-raised-button [color]="viewMode === 'my-coupons' ? 'primary' : ''"
+                (click)="toggleView('my-coupons')">
+                My Coupons
+            </button>
+        </div>
+    </div>
+
+    <!-- Coupons Grid -->
+    <div class="coupons-grid">
+        <div class="coupon-card" *ngFor="let coupon of coupons$ | async">
+            <div class="card-header">
+                <span class="category-badge">{{coupon.category}}</span>
+            </div>
+            <h3>{{coupon.title}}</h3>
+            <p class="description">{{coupon.description}}</p>
+
+            <div class="card-footer">
+                <span class="price">${{coupon.price}}</span>
+                <div class="actions">
+                    <small class="expiry">Exp: {{coupon.endDate | date}}</small>
+
+                    <button *ngIf="viewMode === 'store'" mat-raised-button color="accent"
+                        (click)="purchaseCoupon(coupon)">
+                        Buy Now
+                    </button>
+
+                    <span *ngIf="viewMode === 'my-coupons'" class="owned-badge">
+                        <mat-icon>check_circle</mat-icon> Owned
+                    </span>
+                </div>
+            </div>
+        </div>
+
+        <div *ngIf="(coupons$ | async)?.length === 0" class="no-data">
+            <p>No coupons found.</p>
+        </div>
+    </div>
+</div>

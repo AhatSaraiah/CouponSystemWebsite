@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { AdminService } from '../admin.service';
 
 @Component({
@@ -8,15 +9,24 @@ import { AdminService } from '../admin.service';
 })
 export class AdminCompaniesComponent implements OnInit {
 
-  companies$: unknown | undefined;
-  
+  companies$: Observable<any> | undefined;
+
   constructor(private data: AdminService) { }
 
   ngOnInit() {
-    this.data.getCompanies().subscribe(
-      data => this.companies$ = data
-    );
+    this.companies$ = this.data.getCompanies();
   }
-  
+
+  deleteCompany(id: number): void {
+    if (confirm('Are you sure you want to delete this company?')) {
+      this.data.deleteCompany(id).subscribe(
+        () => {
+          this.companies$ = this.data.getCompanies();
+        },
+        error => console.error('Error deleting company:', error)
+      );
+    }
+  }
+
 
 }

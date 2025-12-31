@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminService } from '../admin.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-admin-customers',
@@ -7,18 +8,22 @@ import { AdminService } from '../admin.service';
   styleUrls: ['./admin-customers.component.css']
 })
 export class AdminCustomersComponent implements OnInit {
-  customers$: unknown | undefined;
+  customers$: Observable<any> | undefined;
 
   constructor(private adminService: AdminService) { }
 
   ngOnInit(): void {
-    this.loadCustomers();
+    this.customers$ = this.adminService.getAllCustomers();
   }
 
-  loadCustomers(): void {
-    this.adminService.getAllCustomers().subscribe(
-      data => this.customers$ = data,
-      error => console.error('Error loading customers:', error)
-    );
+  deleteCustomer(id: number): void {
+    if (confirm('Are you sure you want to delete this customer?')) {
+      this.adminService.deleteCustomer(id).subscribe(
+        () => {
+          this.customers$ = this.adminService.getAllCustomers();
+        },
+        error => console.error('Error deleting customer:', error)
+      );
+    }
   }
 }

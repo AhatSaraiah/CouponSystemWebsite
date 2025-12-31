@@ -10,13 +10,25 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
 
 
+import { AdminCompaniesComponent } from 'src/app/admin-companies/admin-companies.component';
+import { AdminCustomersComponent } from 'src/app/admin-customers/admin-customers.component';
+import { CompanyCouponsComponent } from 'src/app/company-coupons/company-coupons.component';
+import { CustomerCouponsComponent } from 'src/app/customer-coupons/customer-coupons.component';
+
 @NgModule({
-  declarations: [ 
+  declarations: [
     DefaultComponent,
-    LoginComponent],
+    LoginComponent,
+    AdminCompaniesComponent,
+    AdminCustomersComponent,
+    CompanyCouponsComponent,
+    CustomerCouponsComponent
+  ],
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -26,9 +38,14 @@ import { MAT_FORM_FIELD_DEFAULT_OPTIONS } from '@angular/material/form-field';
     MatSelectModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatDatepickerModule,
+    MatNativeDateModule
   ],
-  providers: [{provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' }}]
-
+  providers: [{ provide: MAT_FORM_FIELD_DEFAULT_OPTIONS, useValue: { appearance: 'outline' } }],
+  exports: [
+    DefaultComponent,
+    LoginComponent
+  ]
 })
 export class DefaultModule { }
