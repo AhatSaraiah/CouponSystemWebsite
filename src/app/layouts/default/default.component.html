@@ -1,9 +1,12 @@
 <div class="layout-container" fxLayout="column" fxFlexFill>
   <!-- Header -->
-  <header class="header" fxLayout="row" fxLayoutAlign="start center">
+  <header class="header" fxLayout="row" fxLayoutAlign="space-between center">
     <div class="logo">
       <h1>Coupon System</h1>
     </div>
+    <button mat-button class="sign-out" type="button" (click)="logout()">
+      <mat-icon>logout</mat-icon> Sign out
+    </button>
   </header>
 
   <!-- Main Content Area -->
@@ -62,6 +65,6 @@
 
   <!-- Footer -->
   <footer class="footer" fxLayout="row" fxLayoutAlign="center center">
-    <p>&copy; 2025 Coupon System. All rights reserved.</p>
+    <p>&copy; 2026 Coupon System. All rights reserved.</p>
   </footer>
 </div>

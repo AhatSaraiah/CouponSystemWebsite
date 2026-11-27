@@ -46,3 +46,15 @@ button:disabled {
   cursor: not-allowed;
   opacity: 0.6;
 }
+/* Feedback messages raised through NotificationService */
+.snackbar-success {
+  --mdc-snackbar-container-color: #1b5e20;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-mdc-snack-bar-button-color: #c8e6c9;
+}
+
+.snackbar-error {
+  --mdc-snackbar-container-color: #b3261e;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-mdc-snack-bar-button-color: #ffdad6;
+}

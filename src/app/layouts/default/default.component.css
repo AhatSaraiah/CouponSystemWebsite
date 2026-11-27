@@ -100,3 +100,13 @@
   margin: 0;
   font-size: 0.9rem;
 }
+.sign-out {
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  border-radius: 4px;
+  line-height: 36px;
+}
+
+.sign-out mat-icon {
+  margin-right: 4px;
+}

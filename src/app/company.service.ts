@@ -1,48 +1,51 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
+import { environment } from '../environments/environment';
+import { Company, Coupon } from './core/models';
+
+/**
+ * Company endpoints: authentication plus coupon management for the signed-in company.
+ */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CompanyService {
+  private readonly baseUrl = `${environment.apiBaseUrl}/company`;
 
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-  companyLogin(email: string, password: string) {
-    const encodedEmail = encodeURIComponent(email);
-    const encodedPassword = encodeURIComponent(password);
-    const url = `http://localhost:9096/company/loginCompany/${encodedEmail}/${encodedPassword}`;
-    return this.http.get(url);
-  }
-  getCompanyCoupons() {
-    const url = 'http://localhost:9096/company/getCompanyCoupons';
-    return this.http.get(url);
-  }
-  getCompanyCouponsbyCategory() {
-    const url = 'http://localhost:9096/company/getCompanyCoupons/{category}';
-    return this.http.get(url);
-  }
-  addCoupon(coupon: any) {
-    const url = 'http://localhost:9096/company/addCoupon';
-    return this.http.post(url, coupon);
-  }
-  getCompanyCouponsbyPrice() {
-    const url = 'http://localhost:9096/company/getCompanyCoupons/{maxPrice}';
-    return this.http.get(url);
+  companyLogin(email: string, password: string): Observable<boolean> {
+    const url = `${this.baseUrl}/loginCompany/${encodeURIComponent(email)}/${encodeURIComponent(password)}`;
+    return this.http.get<boolean>(url);
   }
 
-  getCompanyDetails() {
-    const url = 'http://localhost:9096/company/getCompanyDetails';
-    return this.http.get(url);
+  getCompanyDetails(): Observable<Company> {
+    return this.http.get<Company>(`${this.baseUrl}/getCompanyDetails`);
   }
 
-  updateCoupon(coupon: any) {
-    const url = 'http://localhost:9096/company/updateCoupon';
-    return this.http.put(url, coupon);
-  }
-  deleteCoupon(id: number) {
-    const url = `http://localhost:9096/company/deleteCoupon/${id}`;
-    return this.http.delete(url);
+  getCompanyCoupons(): Observable<Coupon[]> {
+    return this.http.get<Coupon[]>(`${this.baseUrl}/getCompanyCoupons`);
   }
 
+  getCompanyCouponsbyCategory(category: string): Observable<Coupon[]> {
+    return this.http.get<Coupon[]>(`${this.baseUrl}/getCompanyCoupons/${encodeURIComponent(category)}`);
+  }
+
+  getCompanyCouponsbyPrice(maxPrice: number): Observable<Coupon[]> {
+    return this.http.get<Coupon[]>(`${this.baseUrl}/getCompanyCoupons/${maxPrice}`);
+  }
+
+  addCoupon(coupon: Coupon): Observable<Coupon> {
+    return this.http.post<Coupon>(`${this.baseUrl}/addCoupon`, coupon);
+  }
+
+  updateCoupon(coupon: Coupon): Observable<Coupon> {
+    return this.http.put<Coupon>(`${this.baseUrl}/updateCoupon`, coupon);
+  }
+
+  deleteCoupon(id: number): Observable<void> {
+    return this.http.delete<void>(`${this.baseUrl}/deleteCoupon/${id}`);
+  }
 }

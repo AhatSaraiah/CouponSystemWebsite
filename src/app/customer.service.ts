@@ -1,42 +1,47 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
+import { environment } from '../environments/environment';
+import { Coupon, Customer } from './core/models';
+
+/**
+ * Customer endpoints: authentication, browsing the store and buying coupons.
+ */
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class CustomerService {
+  private readonly baseUrl = `${environment.apiBaseUrl}/customer`;
 
-  constructor(private http: HttpClient) { }
-  customerLogin(email: string, password: string) {
-    const encodedEmail = encodeURIComponent(email);
-    const encodedPassword = encodeURIComponent(password);
-    const url = `http://localhost:9096/customer/loginCustomer/${encodedEmail}/${encodedPassword}`;
-    return this.http.get(url);
-  }
-  getCustomerCoupons() {
-    const url = 'http://localhost:9096/customer/getCustomerCoupons';
-    return this.http.get(url);
-  }
-  getAllCoupons() {
-    const url = 'http://localhost:9096/customer/getAllCoupons';
-    return this.http.get(url);
-  }
-  getCustomerCouponsbyCategory() {
-    const url = 'http://localhost:9096/customer/getCustomerCoupons/{category}';
-    return this.http.get(url);
-  }
-  addCouponPurchase(coupon: any) {
-    const url = 'http://localhost:9096/customer/addCouponPurchase';
-    return this.http.post(url, coupon);
-  }
-  getCustomerCouponsbyPrice() {
-    const url = 'http://localhost:9096/customer/getCustomerCoupons/{maxPrice}';
-    return this.http.get(url);
+  constructor(private http: HttpClient) {}
+
+  customerLogin(email: string, password: string): Observable<boolean> {
+    const url = `${this.baseUrl}/loginCustomer/${encodeURIComponent(email)}/${encodeURIComponent(password)}`;
+    return this.http.get<boolean>(url);
   }
 
-  getCustomerDetails() {
-    const url = 'http://localhost:9096/customer/getCustomerDetails';
-    return this.http.get(url);
+  getCustomerDetails(): Observable<Customer> {
+    return this.http.get<Customer>(`${this.baseUrl}/getCustomerDetails`);
   }
 
+  getAllCoupons(): Observable<Coupon[]> {
+    return this.http.get<Coupon[]>(`${this.baseUrl}/getAllCoupons`);
+  }
+
+  getCustomerCoupons(): Observable<Coupon[]> {
+    return this.http.get<Coupon[]>(`${this.baseUrl}/getCustomerCoupons`);
+  }
+
+  getCustomerCouponsbyCategory(category: string): Observable<Coupon[]> {
+    return this.http.get<Coupon[]>(`${this.baseUrl}/getCustomerCoupons/${encodeURIComponent(category)}`);
+  }
+
+  getCustomerCouponsbyPrice(maxPrice: number): Observable<Coupon[]> {
+    return this.http.get<Coupon[]>(`${this.baseUrl}/getCustomerCoupons/${maxPrice}`);
+  }
+
+  addCouponPurchase(coupon: Coupon): Observable<Coupon> {
+    return this.http.post<Coupon>(`${this.baseUrl}/addCouponPurchase`, coupon);
+  }
 }

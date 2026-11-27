@@ -5,7 +5,9 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --configuration production",
     "test": "ng test",
+    "test:ci": "ng test --watch=false --browsers=ChromeHeadlessCI",
     "lint": "ng lint"
   },
   "private": true,
@@ -27,8 +29,8 @@
     "zone.js": "~0.12.0"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^22.1.3",
-    "@angular/cli": "^22.1.3",
+    "@angular-devkit/build-angular": "^15.2.11",
+    "@angular/cli": "^15.2.11",
     "@angular/compiler-cli": "^15.2.0",
     "@angular-eslint/builder": "^15.2.0",
     "@angular-eslint/eslint-plugin": "^15.2.0",
@@ -48,5 +50,8 @@
     "karma-jasmine-html-reporter": "^2.1.0",
     "ts-node": "~10.9.0",
     "typescript": "~4.9.5"
+  },
+  "engines": {
+    "node": ">=18.13.0 <19"
   }
 }

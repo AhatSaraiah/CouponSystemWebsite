@@ -1,29 +1,42 @@
 import { Component, OnInit } from '@angular/core';
-import { AdminService } from '../admin.service';
 import { Observable } from 'rxjs';
+
+import { AdminService } from '../admin.service';
+import { NotificationService } from '../core/notification.service';
+import { Customer } from '../core/models';
 
 @Component({
   selector: 'app-admin-customers',
   templateUrl: './admin-customers.component.html',
-  styleUrls: ['./admin-customers.component.css']
+  styleUrls: ['./admin-customers.component.css'],
 })
 export class AdminCustomersComponent implements OnInit {
-  customers$: Observable<any> | undefined;
+  customers$?: Observable<Customer[]>;
 
-  constructor(private adminService: AdminService) { }
+  constructor(
+    private adminService: AdminService,
+    private notification: NotificationService
+  ) {}
 
   ngOnInit(): void {
-    this.customers$ = this.adminService.getAllCustomers();
+    this.loadCustomers();
   }
 
-  deleteCustomer(id: number): void {
-    if (confirm('Are you sure you want to delete this customer?')) {
-      this.adminService.deleteCustomer(id).subscribe(
-        () => {
-          this.customers$ = this.adminService.getAllCustomers();
-        },
-        error => console.error('Error deleting customer:', error)
-      );
+  deleteCustomer(id: number | undefined): void {
+    if (id === undefined || !confirm('Are you sure you want to delete this customer?')) {
+      return;
     }
+
+    this.adminService.deleteCustomer(id).subscribe({
+      next: () => {
+        this.loadCustomers();
+        this.notification.success('Customer deleted.');
+      },
+      error: () => this.notification.error('Could not delete the customer. Please try again.'),
+    });
+  }
+
+  private loadCustomers(): void {
+    this.customers$ = this.adminService.getAllCustomers();
   }
 }

@@ -1,23 +1,31 @@
 import { Component, OnInit } from '@angular/core';
-import { CustomerService } from '../customer.service';
 import { Observable } from 'rxjs';
+
+import { CustomerService } from '../customer.service';
+import { NotificationService } from '../core/notification.service';
+import { Coupon } from '../core/models';
+
+type StoreView = 'store' | 'my-coupons';
 
 @Component({
   selector: 'app-customer-coupons',
   templateUrl: './customer-coupons.component.html',
-  styleUrls: ['./customer-coupons.component.css']
+  styleUrls: ['./customer-coupons.component.css'],
 })
 export class CustomerCouponsComponent implements OnInit {
-  coupons$: Observable<any> | undefined;
-  viewMode: 'store' | 'my-coupons' = 'store';
+  coupons$?: Observable<Coupon[]>;
+  viewMode: StoreView = 'store';
 
-  constructor(private customerService: CustomerService) { }
+  constructor(
+    private customerService: CustomerService,
+    private notification: NotificationService
+  ) {}
 
   ngOnInit(): void {
     this.loadStore();
   }
 
-  toggleView(mode: 'store' | 'my-coupons'): void {
+  toggleView(mode: StoreView): void {
     this.viewMode = mode;
     if (mode === 'store') {
       this.loadStore();
@@ -26,28 +34,26 @@ export class CustomerCouponsComponent implements OnInit {
     }
   }
 
-  loadStore(): void {
+  purchaseCoupon(coupon: Coupon): void {
+    if (!confirm(`Buy ${coupon.title} for ${coupon.price}?`)) {
+      return;
+    }
+
+    this.customerService.addCouponPurchase(coupon).subscribe({
+      next: () => {
+        this.notification.success('Purchase successful!');
+        this.toggleView(this.viewMode);
+      },
+      error: () =>
+        this.notification.error('Purchase failed. The coupon may be expired or already owned.'),
+    });
+  }
+
+  private loadStore(): void {
     this.coupons$ = this.customerService.getAllCoupons();
   }
 
-  loadMyCoupons(): void {
+  private loadMyCoupons(): void {
     this.coupons$ = this.customerService.getCustomerCoupons();
-  }
-
-  purchaseCoupon(coupon: any): void {
-    if (confirm(`Buy ${coupon.title} for $${coupon.price}?`)) {
-      this.customerService.addCouponPurchase(coupon).subscribe(
-        () => {
-          alert('Purchase successful!');
-          // Refresh current view
-          if (this.viewMode === 'store') this.loadStore();
-          else this.loadMyCoupons();
-        },
-        error => {
-          console.error('Error purchasing coupon:', error);
-          alert('Failed to purchase coupon. It might be expired or already owned.');
-        }
-      );
-    }
   }
 }

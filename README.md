@@ -1,340 +1,139 @@
-# Coupon System - Frontend
+# Coupon System — Web Client
 
-Angular web application for the Coupon Management System.
+[![CI](https://github.com/AhatSaraiah/CouponSystemWebsite/actions/workflows/ci.yml/badge.svg?branch=master)](https://github.com/AhatSaraiah/CouponSystemWebsite/actions/workflows/ci.yml)
+[![Angular](https://img.shields.io/badge/Angular-15-DD0031?logo=angular&logoColor=white)](https://angular.io)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 
-## 🛠️ Tech Stack
+Angular front end for a three-role coupon management system. Administrators manage companies
+and customers, companies publish and retire coupons, and customers browse the store and buy
+coupons. Each role gets its own navigation and its own guarded area of the app.
 
-- **Angular 11.0.5** - Web framework
-- **Angular Material 11.0.3** - UI component library
-- **RxJS 6.6** - Reactive programming
-- **TypeScript 4.0** - Type-safe JavaScript
-- **Angular Flex Layout** - Responsive layouts
-- **Angular Router** - Navigation
+The client talks to a separate Java / Spring REST service (the backend of the Amdocs & Co-Impact
+full-stack program); this repository contains the Angular application only.
 
-## 📦 Dependencies
+![Login screen](docs/screenshot-login.png)
 
-```json
-{
-  "dependencies": {
-    "@angular/animations": "~11.0.5",
-    "@angular/common": "~11.0.5",
-    "@angular/core": "~11.0.5",
-    "@angular/forms": "~11.0.5",
-    "@angular/material": "^11.0.3",
-    "@angular/platform-browser": "~11.0.5",
-    "@angular/router": "~11.0.5",
-    "@angular/flex-layout": "^11.0.0-beta.33",
-    "rxjs": "~6.6.0",
-    "tslib": "^2.0.0",
-    "zone.js": "~0.10.2"
-  }
-}
-```
+## Features
 
-## 🏗️ Project Structure
+**Admin**
+- List and remove companies and customers
+- Sign in through the shared login screen and land directly in the admin area
+
+**Company**
+- See every coupon the signed-in company owns
+- Create a coupon with category, title, description, dates, amount, price and image
+- Delete a coupon
+
+**Customer**
+- Browse the full store and the coupons already purchased
+- Buy a coupon with a single action
+- Switch between the store and "my coupons" views
+
+**Across the app**
+- Role-aware sidebar: each account type only sees the screens it can use
+- Route guards keep an unauthenticated visitor, or the wrong role, out of protected screens
+- The session survives a page refresh and is cleared on sign out
+- Success and failure feedback through Material snackbars instead of blocking alerts
+- One place to configure the API host (`src/environments/environment.ts`)
+
+## Tech stack
+
+| Layer | Choice |
+| --- | --- |
+| Framework | Angular 15 (standalone modules, strict TypeScript) |
+| UI | Angular Material 15, Angular Flex Layout, custom CSS |
+| Data | `HttpClient` + RxJS observables, typed models |
+| Tests | Karma + Jasmine, `HttpTestingController` for the service layer |
+| Tooling | Angular CLI 15, ESLint (`@angular-eslint`), GitHub Actions |
+
+## Project structure
 
 ```
 src/app/
-├── layouts/
-│   └── default/                    # Main layout with sidebar
-│       ├── default.component.html
-│       ├── default.component.css
-│       ├── default.component.ts
-│       └── default.module.ts       # Feature module
-│
-├── login/                          # Authentication
-│   ├── login.component.html
-│   ├── login.component.css
-│   └── login.component.ts
-│
-├── admin-companies/                # Admin: Company management
-│   ├── admin-companies.component.html
-│   ├── admin-companies.component.css
-│   └── admin-companies.component.ts
-│
-├── admin-customers/                # Admin: Customer management
-│   ├── admin-customers.component.html
-│   ├── admin-customers.component.css
-│   └── admin-customers.component.ts
-│
-├── company-coupons/                # Company: Coupon CRUD
-│   ├── company-coupons.component.html
-│   ├── company-coupons.component.css
-│   └── company-coupons.component.ts
-│
-├── customer-coupons/               # Customer: Browse & purchase
-│   ├── customer-coupons.component.html
-│   ├── customer-coupons.component.css
-│   └── customer-coupons.component.ts
-│
-├── services/
-│   ├── admin.service.ts            # Admin API calls
-│   ├── company.service.ts          # Company API calls
-│   ├── customer.service.ts         # Customer API calls
-│   └── auth.service.ts             # Role-based auth
-│
-├── app-routing.module.ts           # Route configuration
-├── app.component.ts                # Root component
-└── styles.css                      # Global styles
+├── core/
+│   ├── models.ts               # Company, Customer, Coupon, categories, client types
+│   ├── auth.guard.ts           # role-aware CanActivate guard
+│   └── notification.service.ts # snackbar wrapper used by every feature
+├── layouts/default/            # shell: header, role-based sidebar, sign out
+├── login/                      # client-type select + credential form
+├── admin-companies/            # admin: companies table
+├── admin-customers/            # admin: customers table
+├── company-coupons/            # company: coupon list + create form
+├── customer-coupons/           # customer: store and owned coupons
+├── admin.service.ts            # /admin endpoints
+├── company.service.ts          # /company endpoints
+├── customer.service.ts         # /customer endpoints
+└── auth.service.ts             # current role, mirrored into sessionStorage
 ```
 
-## 🎨 Features
+Every HTTP call is built from `environment.apiBaseUrl`, so moving the app between a local
+backend and a deployed one is a one-line change.
 
-### **Role-Based Navigation**
-- **Admin** sees: Companies, Customers
-- **Company** sees: Company Coupons
-- **Customer** sees: Browse & Buy
+## Getting started
 
-### **UI Components**
+Requirements: **Node.js 18** (see `.nvmrc`) and a running instance of the Coupon System backend.
 
-#### **Admin Dashboard**
-- ✅ Structured HTML tables for companies/customers
-- ✅ Delete buttons with confirmation
-- ✅ Add forms for new entities
-- ✅ Real-time data updates with Observables
-
-#### **Company Coupons**
-- ✅ Reactive form with validation
-- ✅ **Material Datepicker** with calendar popup
-- ✅ Category dropdown (Food, Fashion, Sport, Home, Electricity, Restaurant, Vacation)
-- ✅ Coupon cards with badges, pricing, and expiration
-- ✅ Delete functionality
-- ✅ Toggle form visibility
-
-#### **Customer Dashboard**
-- ✅ **Browse Store** - View all available coupons
-- ✅ **My Coupons** - View purchased coupons
-- ✅ **Buy Now** button with confirmation
-- ✅ Category badges and expiration dates
-- ✅ Owned badge for purchased coupons
-
-### **Material Design Components Used**
-- `mat-form-field` - Form inputs
-- `mat-select` - Dropdowns
-- `mat-datepicker` - Calendar date picker
-- `mat-button` - Buttons
-- `mat-icon` - Material icons
-- `mat-raised-button` - Elevated buttons
-
-## 🚀 Running the Frontend
-
-### **Development Server**
 ```bash
-cd frontend
-npm install
-npm start
-```
-Navigate to `http://localhost:4200`
-
-### **Production Build**
-```bash
-npm run build --prod
-```
-Output: `dist/frontend/`
-
-### **Linting**
-```bash
-npm run lint
+git clone https://github.com/AhatSaraiah/CouponSystemWebsite.git
+cd CouponSystemWebsite
+nvm use            # or install Node 18 manually
+npm ci
+npm start          # http://localhost:4200
 ```
 
-## 🔧 Configuration
+The backend is expected on `http://localhost:9096`. Point the app somewhere else by editing
+`apiBaseUrl` in `src/environments/environment.ts` (development) or
+`src/environments/environment.prod.ts` (production build).
 
-### **API Base URLs**
-Located in service files (`*.service.ts`):
-```typescript
-private baseUrl = 'http://localhost:9096';
-```
+## Scripts
 
-### **Routing**
-`app-routing.module.ts`:
-```typescript
-const routes: Routes = [
-  { path: '', component: LoginComponent },
-  {
-    path: 'DefaultComponent',
-    component: DefaultComponent,
-    children: [
-      { path: 'admin-companies', component: AdminCompaniesComponent },
-      { path: 'admin-customers', component: AdminCustomersComponent },
-      { path: 'company-coupons', component: CompanyCouponsComponent },
-      { path: 'customer-coupons', component: CustomerCouponsComponent }
-    ]
-  }
-];
-```
+| Command | What it does |
+| --- | --- |
+| `npm start` | Dev server with live reload on `http://localhost:4200` |
+| `npm run build` | Development build into `dist/` |
+| `npm run build:prod` | Optimised production build |
+| `npm test` | Unit tests in watch mode |
+| `npm run test:ci` | Unit tests, single run, headless Chrome (`ChromeHeadlessCI` launcher) |
+| `npm run lint` | ESLint over the project |
 
-### **Material Theme**
-`styles.css`:
-```css
-@import "~@angular/material/prebuilt-themes/indigo-pink.css";
-```
+## API contract
 
-## 🎯 Key Implementation Details
+| Method | Endpoint | Service method |
+| --- | --- | --- |
+| GET | `/admin/loginAdmin/{email}/{password}` | `AdminService.adminLogin` |
+| GET | `/admin/getAllCompanies`, `/admin/getOneCompany/{id}` | `AdminService.getCompanies`, `getOneCompany` |
+| POST / PUT / DELETE | `/admin/addCompany`, `/admin/updateCompany`, `/admin/deleteCompany/{id}` | `AdminService.addCompany`, `updateCompany`, `deleteCompany` |
+| GET | `/admin/getAllCustomers`, `/admin/getOneCustomer/{id}` | `AdminService.getAllCustomers`, `getOneCustomer` |
+| POST / PUT / DELETE | `/admin/addCustomer`, `/admin/updateCustomer`, `/admin/deleteCustomer/{id}` | `AdminService.addCustomer`, `updateCustomer`, `deleteCustomer` |
+| GET | `/company/loginCompany/{email}/{password}` | `CompanyService.companyLogin` |
+| GET | `/company/getCompanyCoupons`, `/getCompanyCoupons/{category}`, `/getCompanyCoupons/{maxPrice}` | `CompanyService.getCompanyCoupons`, `getCompanyCouponsbyCategory`, `getCompanyCouponsbyPrice` |
+| POST / PUT / DELETE | `/company/addCoupon`, `/company/updateCoupon`, `/company/deleteCoupon/{id}` | `CompanyService.addCoupon`, `updateCoupon`, `deleteCoupon` |
+| GET | `/customer/loginCustomer/{email}/{password}` | `CustomerService.customerLogin` |
+| GET | `/customer/getAllCoupons`, `/customer/getCustomerCoupons`, `/customer/getCustomerCoupons/{category}` | `CustomerService.getAllCoupons`, `getCustomerCoupons`, `getCustomerCouponsbyCategory` |
+| POST | `/customer/addCouponPurchase` | `CustomerService.addCouponPurchase` |
 
-### **Reactive Forms**
-```typescript
-this.couponForm = this.fb.group({
-  title: ['', Validators.required],
-  category: ['', Validators.required],
-  description: [''],
-  startDate: ['', Validators.required],
-  endDate: ['', Validators.required],
-  amount: [1, [Validators.required, Validators.min(1)]],
-  price: [0, [Validators.required, Validators.min(0)]]
-});
-```
+Credentials are URL-encoded before they are placed in the path.
 
-### **HTTP Service Calls**
-```typescript
-// Using Observables
-getCoupons(): Observable<any> {
-  return this.http.get(`${this.baseUrl}/company/getCompanyCoupons`);
-}
+## Quality
 
-// Subscribe in component
-this.coupons$ = this.companyService.getCoupons();
-```
+- `npm run lint` passes with no warnings
+- 35 unit tests covering every service endpoint, the login flow and the shell component
+- CI runs lint, build and the headless test suite on every push and pull request to `master`
+- Strict TypeScript and strict Angular templates: the models in `core/models.ts` are the single
+  source of truth for the API payloads
 
-### **Async Pipe (No Manual Unsubscribe)**
-```html
-<div *ngFor="let coupon of coupons$ | async">
-  {{ coupon.title }}
-</div>
-```
+## Known limitations and next steps
 
-### **Role-Based Rendering**
-```html
-<ng-container *ngIf="(userRole$ | async) === 'company'">
-  <h3>Management</h3>
-  <ul>
-    <li>
-      <a routerLink="/DefaultComponent/company-coupons">
-        Company Coupons
-      </a>
-    </li>
-  </ul>
-</ng-container>
-```
+- **Credentials in the URL path.** The backend exposes login as `GET /{role}/login.../{email}/{password}`,
+  so the password ends up in the request URL. Moving to `POST` with a JSON body (and a token in the
+  response) is the next backend-driven change; the services are already isolated behind one method each,
+  so the client side is a small edit.
+- **Role-only session.** The app remembers the role, not a server session or token; the API is trusted to
+  keep its own session state.
+- **Native confirm dialogs.** Destructive actions still use `confirm()`. Replacing them with a Material
+  dialog is planned.
+- **No end-to-end suite yet.** `e2e/` is scaffolded and waiting for the first real scenario.
 
-### **Material Datepicker**
-```html
-<mat-form-field appearance="outline">
-  <mat-label>Start Date</mat-label>
-  <input matInput [matDatepicker]="startPicker" formControlName="startDate">
-  <mat-datepicker-toggle matSuffix [for]="startPicker"></mat-datepicker-toggle>
-  <mat-datepicker #startPicker></mat-datepicker>
-</mat-form-field>
-```
+## License
 
-## 🎨 Styling Highlights
-
-### **Coupon Cards**
-```css
-.coupon-card {
-  background: white;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.coupon-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-}
-```
-
-### **Category Badges**
-```css
-.category-badge {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
-  padding: 4px 12px;
-  border-radius: 20px;
-  font-size: 12px;
-  font-weight: 500;
-}
-```
-
-### **Responsive Grid**
-```css
-.coupons-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 24px;
-  padding: 24px;
-}
-```
-
-## 🔐 Authentication Flow
-
-1. **Login** → Select role (Admin/Company/Customer)
-2. **AuthService** stores role in BehaviorSubject
-3. **Navigate** to `/DefaultComponent`
-4. **Sidebar** renders role-specific menu items
-5. **Components** fetch data based on role
-
-## 🐛 Common Issues
-
-### **CORS Errors**
-- Ensure backend has `@CrossOrigin(origins = "http://localhost:4200")`
-- Check browser console for specific CORS error
-
-### **Material Components Not Working**
-- Verify `@angular/material` is installed
-- Import required modules in `default.module.ts`
-- Import Material theme in `styles.css`
-
-### **Datepicker Not Showing**
-- Import `MatDatepickerModule` and `MatNativeDateModule`
-- Add `<mat-datepicker>` element with template reference variable
-
-### **Forms Not Validating**
-- Import `ReactiveFormsModule` in module
-- Ensure `FormGroup` is initialized in constructor
-- Bind `[formGroup]` and `formControlName` correctly
-
-## 📱 Responsive Design
-
-- **Flex Layout** for responsive sidebar/content
-- **Material Grid** for coupon cards
-- **Mobile-friendly** forms and buttons
-- **Breakpoints** handled by Angular Flex Layout
-
-## 🚀 Future Enhancements
-
-- [ ] Logout button with session clearing
-- [ ] Route guards for role-based access
-- [ ] Loading spinners for async operations
-- [ ] Toast notifications (Snackbar)
-- [ ] Form field error messages
-- [ ] Search and filter functionality
-- [ ] Pagination for large datasets
-- [ ] Image upload for coupons
-- [ ] User profile page
-- [ ] Dark mode toggle
-
-## 🧪 Testing
-
-### **Unit Tests**
-```bash
-npm run test
-```
-
-### **E2E Tests**
-```bash
-npm run e2e
-```
-
-## 📝 Development Notes
-
-- **No manual unsubscribe** needed when using `async` pipe
-- **Observables** preferred over Promises for HTTP calls
-- **OnPush change detection** can be added for performance
-- **Lazy loading** can be implemented for feature modules
-
----
-
-**Angular Version:** 11.0.5  
-**Node Version:** 14+  
-**Package Manager:** npm
+[MIT](LICENSE) © Ahat Saraiah

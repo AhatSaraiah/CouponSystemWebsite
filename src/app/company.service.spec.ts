@@ -2,105 +2,95 @@ import { TestBed } from '@angular/core/testing';
 import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
 import { CompanyService } from './company.service';
+import { environment } from '../environments/environment';
+import { Coupon, CouponCategory } from './core/models';
 
 describe('CompanyService', () => {
   let service: CompanyService;
   let httpMock: HttpTestingController;
 
+  const base = `${environment.apiBaseUrl}/company`;
+
+  const coupon: Coupon = {
+    id: 5,
+    category: CouponCategory.Food,
+    title: 'Two for one',
+    description: 'Lunch deal',
+    startDate: '2026-01-01',
+    endDate: '2026-12-31',
+    amount: 10,
+    price: 25,
+  };
+
   beforeEach(() => {
     TestBed.configureTestingModule({
       imports: [HttpClientTestingModule],
-      providers: [CompanyService]
+      providers: [CompanyService],
     });
     service = TestBed.inject(CompanyService);
     httpMock = TestBed.inject(HttpTestingController);
   });
 
-  afterEach(() => {
-    httpMock.verify();
-  });
+  afterEach(() => httpMock.verify());
 
   it('should be created', () => {
     expect(service).toBeTruthy();
   });
 
-  it('should call loginCompany with correct URL', () => {
-    service.companyLogin().subscribe();
+  it('URL-encodes the credentials when logging in', () => {
+    service.companyLogin('shop@example.com', 'a b').subscribe();
 
-    const req = httpMock.expectOne((request) => {
-      return request.url.includes('/company/loginCompany');
-    });
+    const req = httpMock.expectOne(`${base}/loginCompany/shop%40example.com/a%20b`);
     expect(req.request.method).toBe('GET');
-    req.flush({});
+    req.flush(true);
   });
 
-  it('should get company coupons', () => {
-    const mockCoupons = [{ id: 1, title: 'Test Coupon' }];
+  it('lists the coupons of the signed-in company', () => {
+    service.getCompanyCoupons().subscribe((result) => expect(result).toEqual([coupon]));
 
-    service.getCompanyCoupons().subscribe(coupons => {
-      expect(coupons).toEqual(mockCoupons);
-    });
-
-    const req = httpMock.expectOne('http://localhost:9096/company/getCompanyCoupons');
+    const req = httpMock.expectOne(`${base}/getCompanyCoupons`);
     expect(req.request.method).toBe('GET');
-    req.flush(mockCoupons);
+    req.flush([coupon]);
   });
 
-  it('should get company coupons by category', () => {
-    service.getCompanyCouponsbyCategory().subscribe();
+  it('filters coupons by category in the path', () => {
+    service.getCompanyCouponsbyCategory('Food').subscribe();
 
-    const req = httpMock.expectOne((request) => {
-      return request.url.includes('/company/getCompanyCoupons');
-    });
+    const req = httpMock.expectOne(`${base}/getCompanyCoupons/Food`);
     expect(req.request.method).toBe('GET');
-    req.flush([]);
+    req.flush([coupon]);
   });
 
-  it('should get company coupons by price', () => {
-    service.getCompanyCouponsbyPrice().subscribe();
+  it('filters coupons by max price in the path', () => {
+    service.getCompanyCouponsbyPrice(80).subscribe();
 
-    const req = httpMock.expectOne((request) => {
-      return request.url.includes('/company/getCompanyCoupons');
-    });
+    const req = httpMock.expectOne(`${base}/getCompanyCoupons/80`);
     expect(req.request.method).toBe('GET');
-    req.flush([]);
+    req.flush([coupon]);
   });
 
-  it('should get company details', () => {
-    const mockCompany = { id: 1, name: 'Test Company' };
+  it('creates a coupon with POST', () => {
+    service.addCoupon(coupon).subscribe();
 
-    service.getCompanyDetails().subscribe(company => {
-      expect(company).toEqual(mockCompany);
-    });
-
-    const req = httpMock.expectOne('http://localhost:9096/company/getCompanyDetails');
-    expect(req.request.method).toBe('GET');
-    req.flush(mockCompany);
+    const req = httpMock.expectOne(`${base}/addCoupon`);
+    expect(req.request.method).toBe('POST');
+    expect(req.request.body).toEqual(coupon);
+    req.flush(coupon);
   });
 
-  it('should add coupon', () => {
-    service.addCoupon().subscribe();
+  it('updates a coupon with PUT', () => {
+    service.updateCoupon(coupon).subscribe();
 
-    const req = httpMock.expectOne('http://localhost:9096/company/addCoupon');
-    expect(req.request.method).toBe('GET');
-    req.flush({});
+    const req = httpMock.expectOne(`${base}/updateCoupon`);
+    expect(req.request.method).toBe('PUT');
+    req.flush(coupon);
   });
 
-  it('should update coupon', () => {
-    service.updateCoupon().subscribe();
+  it('deletes a coupon by id', () => {
+    service.deleteCoupon(5).subscribe();
 
-    const req = httpMock.expectOne('http://localhost:9096/company/updateCoupon');
-    expect(req.request.method).toBe('GET');
-    req.flush({});
-  });
-
-  it('should delete coupon', () => {
-    service.deleteCoupon().subscribe();
-
-    const req = httpMock.expectOne((request) => {
-      return request.url.includes('/company/deleteCoupon');
-    });
-    expect(req.request.method).toBe('GET');
-    req.flush({});
+    const req = httpMock.expectOne(`${base}/deleteCoupon/5`);
+    expect(req.request.method).toBe('DELETE');
+    req.flush(null);
   });
 });
