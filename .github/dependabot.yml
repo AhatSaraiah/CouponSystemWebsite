@@ -1,0 +1,41 @@
+version: 2
+# The workspace is pinned to Angular 15: a major bump of the framework or its
+# toolchain (build-angular, CLI, compiler-cli, TypeScript, zone.js) breaks the
+# build, so those majors are upgraded deliberately rather than by a bot.
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      angular-minor-patch:
+        patterns:
+          - '@angular/*'
+          - '@angular-devkit/*'
+        update-types:
+          - minor
+          - patch
+      dev-dependencies:
+        dependency-type: development
+        update-types:
+          - minor
+          - patch
+    ignore:
+      - dependency-name: '@angular/*'
+        update-types:
+          - version-update:semver-major
+      - dependency-name: '@angular-devkit/*'
+        update-types:
+          - version-update:semver-major
+      - dependency-name: typescript
+        update-types:
+          - version-update:semver-major
+      - dependency-name: zone.js
+        update-types:
+          - version-update:semver-major
+
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly
