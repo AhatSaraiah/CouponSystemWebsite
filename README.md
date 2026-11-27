@@ -114,6 +114,19 @@ The backend is expected on `http://localhost:9096`. Point the app somewhere else
 
 Credentials are URL-encoded before they are placed in the path.
 
+## Deployment
+
+The client deploys to GitHub Pages on every push to `master` (`.github/workflows/deploy-pages.yml`):
+<https://ahatsaraiah.github.io/CouponSystemWebsite/>
+
+The API host is injected at build time from the repository variable `API_BASE_URL`
+(Settings > Secrets and variables > Actions > Variables). Point it at the deployed backend, for
+example `https://coupon-system-api.onrender.com`, and re-run the workflow. Until it is set, the build
+falls back to `http://localhost:9096`.
+
+The backend repository ships a `render.yaml` blueprint, so the API can be hosted with one click; see
+[CouponSystem-Server](https://github.com/AhatSaraiah/CouponSystem-Server).
+
 ## Quality
 
 - `npm run lint` passes with no warnings
