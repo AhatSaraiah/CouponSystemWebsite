@@ -41,7 +41,7 @@ full-stack program); this repository contains the Angular application only.
 | Layer | Choice |
 | --- | --- |
 | Framework | Angular 15 (standalone modules, strict TypeScript) |
-| UI | Angular Material 15, Angular Flex Layout, custom CSS |
+| UI | Angular Material 15, custom CSS (no layout framework needed) |
 | Data | `HttpClient` + RxJS observables, typed models |
 | Tests | Karma + Jasmine, `HttpTestingController` for the service layer |
 | Tooling | Angular CLI 15, ESLint (`@angular-eslint`), GitHub Actions |
@@ -122,6 +122,15 @@ Credentials are URL-encoded before they are placed in the path.
 - Strict TypeScript and strict Angular templates: the models in `core/models.ts` are the single
   source of truth for the API payloads
 
+## Security notes
+
+`npm audit --omit=dev` reports advisories that only a framework upgrade can clear: Angular 15 is
+outside the patched range for several XSS advisories in `@angular/core`. The toolchain is pinned to
+Angular 15 because that is what this workspace was migrated to; moving to a current Angular release
+is the single highest-value follow-up here and is tracked below. Everything else that could be fixed
+without a breaking change has been (`npm audit fix`, removal of the unused `jqwidgets-ng` and the
+deprecated `@angular/flex-layout`).
+
 ## Known limitations and next steps
 
 - **Credentials in the URL path.** The backend exposes login as `GET /{role}/login.../{email}/{password}`,
@@ -133,6 +142,9 @@ Credentials are URL-encoded before they are placed in the path.
 - **Native confirm dialogs.** Destructive actions still use `confirm()`. Replacing them with a Material
   dialog is planned.
 - **No end-to-end suite yet.** `e2e/` is scaffolded and waiting for the first real scenario.
+- **Framework version.** Angular 15 predates several security fixes in the framework itself. Upgrading
+  the workspace (Angular, Material, the ESLint toolchain and the Karma builder) is the next planned
+  piece of work.
 
 ## License
 

@@ -1,6 +1,6 @@
-<div class="layout-container" fxLayout="column" fxFlexFill>
+<div class="layout-container">
   <!-- Header -->
-  <header class="header" fxLayout="row" fxLayoutAlign="space-between center">
+  <header class="header">
     <div class="logo">
       <h1>Coupon System</h1>
     </div>
@@ -10,9 +10,9 @@
   </header>
 
   <!-- Main Content Area -->
-  <div class="main-content" fxLayout="row" fxFlex>
+  <div class="main-content">
     <!-- Sidebar -->
-    <aside class="sidebar" fxFlex="20" fxLayout="column">
+    <aside class="sidebar">
       <nav class="nav-menu">
         <!-- Admin Section - Only for Admin users -->
         <ng-container *ngIf="(userRole$ | async) === 'admin'">
@@ -58,13 +58,13 @@
     </aside>
 
     <!-- Content Area -->
-    <main class="content" fxFlex="80">
+    <main class="content">
       <router-outlet></router-outlet>
     </main>
   </div>
 
   <!-- Footer -->
-  <footer class="footer" fxLayout="row" fxLayoutAlign="center center">
+  <footer class="footer">
     <p>&copy; 2026 Coupon System. All rights reserved.</p>
   </footer>
 </div>

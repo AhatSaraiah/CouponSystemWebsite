@@ -4,7 +4,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { DefaultComponent } from 'src/app/layouts/default/default.component';
 import { LoginComponent } from 'src/app/login/login.component';
 import { RouterModule } from '@angular/router';
-import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
@@ -34,7 +33,6 @@ import { CustomerCouponsComponent } from 'src/app/customer-coupons/customer-coup
     CommonModule,
     ReactiveFormsModule,
     RouterModule,
-    FlexLayoutModule,
     MatFormFieldModule,
     MatSelectModule,
     MatInputModule,
